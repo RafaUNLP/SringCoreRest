@@ -2,7 +2,7 @@ package com.example.demo.persistencia.clases.DAO;
 
 import java.util.List;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 

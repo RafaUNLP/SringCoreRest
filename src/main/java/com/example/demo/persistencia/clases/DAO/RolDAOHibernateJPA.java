@@ -1,7 +1,7 @@
 package com.example.demo.persistencia.clases.DAO;
 
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
 
 import org.springframework.stereotype.Repository;
 

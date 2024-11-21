@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.example.demo.persistencia.clases.DAO.SugerenciaDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Sugerencia;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")  // Activa el perfil 'test' para las pruebas
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestSugerenciaDAOHibernateJPA {
 

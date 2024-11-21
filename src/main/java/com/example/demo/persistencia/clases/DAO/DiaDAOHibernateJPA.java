@@ -1,9 +1,9 @@
 package com.example.demo.persistencia.clases.DAO;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,9 +13,6 @@ import com.example.demo.persistencia.interfaces.DiaDAO;
 
 @Repository
 public class DiaDAOHibernateJPA extends GenericDAOHibernateJPA<Dia> implements DiaDAO {
-
-    @PersistenceContext
-    private EntityManager em;
 
     public DiaDAOHibernateJPA() {
         super(Dia.class);

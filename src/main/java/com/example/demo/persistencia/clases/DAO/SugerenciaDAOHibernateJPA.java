@@ -3,7 +3,7 @@ package com.example.demo.persistencia.clases.DAO;
 import com.example.demo.persistencia.clases.entidades.Sugerencia;
 import com.example.demo.persistencia.interfaces.SugerenciaDAO;
 
-import javax.persistence.TypedQuery;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;

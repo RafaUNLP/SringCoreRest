@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.persistencia.clases.DAO.TurnoDAOHibernateJPA;
@@ -22,6 +23,7 @@ import com.example.demo.persistencia.clases.entidades.Turno;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")  // Activa el perfil 'test' para las pruebas
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestTurnoDAOHibernateJPA {
 

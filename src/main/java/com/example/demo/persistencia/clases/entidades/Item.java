@@ -1,9 +1,9 @@
 package com.example.demo.persistencia.clases.entidades;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 
 @Entity

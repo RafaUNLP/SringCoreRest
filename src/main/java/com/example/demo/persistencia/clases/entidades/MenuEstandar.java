@@ -1,6 +1,6 @@
 package com.example.demo.persistencia.clases.entidades;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @Entity
 //NOTA: su Id es tambien la FK a la tabla Menu
