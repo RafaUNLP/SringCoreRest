@@ -3,12 +3,10 @@ package com.example.demo.persistencia.clases.DAO;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
+
 import jakarta.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.PersistenceContext;
 
 import com.example.demo.persistencia.clases.entidades.Compra;
 import com.example.demo.persistencia.interfaces.CompraDAO;
