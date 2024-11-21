@@ -76,7 +76,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public void delete(T entity) {
         try {
-            em.remove(entity);  // Si la entidad está gestionada, no es necesario hacer merge
+            em.remove(em.merge(entity));  // Si la entidad está gestionada, no es necesario hacer merge
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al eliminar la entidad", e);
         }

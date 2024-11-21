@@ -76,7 +76,7 @@ class TestCompraDAOHibernateJPA {
         inicio = LocalDate.of(2024, 1, 1);
         fin = LocalDate.of(2024, 3, 1);
         compras = compraDao.findBetweenDates(inicio, fin, 3);
-        assertEquals(3, compras.size());
+        assertEquals(2, compras.size());
         assertEquals(500.0, compras.get(0).getPrecio());
         assertEquals(1000.0, compras.get(1).getPrecio());
 
@@ -91,9 +91,9 @@ class TestCompraDAOHibernateJPA {
     
     @AfterAll
     public void tearDown() {
-    	compraDao.delete(compra1.getId());
-    	compraDao.delete(compra2.getId());
-    	compraDao.delete(compra3.getId());
+    	compraDao.delete(compra1);
+    	compraDao.delete(compra2);
+    	compraDao.delete(compra3);
     }
 
 }

@@ -28,8 +28,7 @@ public class TestMenuDAOHibernateJPA {
     @Test
     void testPersistMenu() {
         // Test para persistir un Menu en la base de datos
-        MenuVegetariano menuVegetariano = new MenuVegetariano();
-        menuVegetariano.setNombre("Ensalada de verduras");
+        MenuVegetariano menuVegetariano = new MenuVegetariano(10.0,"Ensalada de verduras","Ensalada de lechuga","Plato principal vegetariano","Fruta","Agua");
 
         menuDAO.persist(menuVegetariano);
 
@@ -42,11 +41,8 @@ public class TestMenuDAOHibernateJPA {
     @Test
     void testFindVegetarians() {
         // Test para verificar que se devuelvan los menús vegetarianos
-        Menu menu1 = new MenuVegetariano();
-        menu1.setNombre("Ensalada de frutas");
-        
-        Menu menu2 = new MenuVegetariano();
-        menu2.setNombre("Tarta de espinacas");
+    	Menu menu1 = new MenuVegetariano(10.0, "Ensalada de frutas", "Ensalada de frutas", "Arroz con vegetales", "Fruta", "Jugo");
+        Menu menu2 = new MenuVegetariano(12.0, "Tarta de espinacas", "Tarta de espinacas", "Ensalada de tomate", "Yogur", "Agua");
 
         menuDAO.persist(menu1);
         menuDAO.persist(menu2);
@@ -62,11 +58,8 @@ public class TestMenuDAOHibernateJPA {
     @Test
     void testFindStandards() {
         // Test para verificar que se devuelvan los menús estándar
-        Menu menu1 = new MenuEstandar();
-        menu1.setNombre("Bife de chorizo");
-        
-        Menu menu2 = new MenuEstandar();
-        menu2.setNombre("Pollo al horno");
+        Menu menu1 = new MenuEstandar(12.5, "Bife de chorizo", "Ensalada mixta", "Bife de chorizo", "Helado", "Vino tinto");
+        Menu menu2 = new MenuEstandar(10, "Pollo al horno", "Ensalada mixta", "Pollo al horno", "Helado", "Vino tinto");
 
         menuDAO.persist(menu1);
         menuDAO.persist(menu2);
@@ -82,8 +75,7 @@ public class TestMenuDAOHibernateJPA {
     @Test
     void testDeleteMenu() {
         // Test para eliminar un Menu de la base de datos
-        Menu menu = new MenuVegetariano();
-        menu.setNombre("Sopa de verduras");
+        Menu menu = new MenuVegetariano(10.0, "Ensalada de lentejas", "Ensalada de lentejas", "Pan", "Fruta", "Jugo");
 
         menuDAO.persist(menu);
 
