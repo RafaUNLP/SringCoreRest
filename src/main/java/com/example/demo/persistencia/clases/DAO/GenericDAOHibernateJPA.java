@@ -1,9 +1,9 @@
 package com.example.demo.persistencia.clases.DAO;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 
 import com.example.demo.persistencia.interfaces.GenericDAO;
 import org.springframework.transaction.annotation.Transactional;

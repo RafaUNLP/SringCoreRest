@@ -1,8 +1,9 @@
 package com.example.demo.persistencia.clases.DAO;
 
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,11 +11,16 @@ import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
 import com.example.demo.persistencia.interfaces.UsuarioDAO;
 
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 @Repository
+@PersistenceContext
 public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> implements UsuarioDAO {
 
+	
     public UsuarioDAOHibernateJPA() {
         super(Usuario.class);
     }
@@ -37,9 +43,10 @@ public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> impl
         TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.rol.nombre = :rol ORDER BY u.nombre ASC", this.entityClass);
         query.setParameter("rol", rol.getNombre());
         return query.getResultList();  // El ciclo de vida del EntityManager es manejado por Spring
-    }
-    
+    }    
+   
     @Override
+    @Transactional    
     public List<Usuario> findAllOrderedByNameAsc() {
         TypedQuery<Usuario> query = em.createQuery(
             "SELECT u FROM Usuario u ORDER BY u.nombre ASC", this.entityClass);

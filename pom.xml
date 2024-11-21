@@ -59,13 +59,8 @@
 		<dependency>
 	        <groupId>org.postgresql</groupId>
 	        <artifactId>postgresql</artifactId>
+	        <version>42.6.2</version>
    		</dependency>
-		<!--de acá para abajo son imports de otro proyecto que utilizó esta capa de persistencia-->
-		<!--<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-		    <version>42.6.2</version>
-		</dependency>-->
 	</dependencies>
 
 	<build>
