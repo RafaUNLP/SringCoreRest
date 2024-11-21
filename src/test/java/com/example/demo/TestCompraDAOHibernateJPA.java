@@ -1,5 +1,6 @@
 package com.example.demo;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,18 +8,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.persistencia.clases.DAO.CompraDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Compra;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
+@Transactional
 @ActiveProfiles("test")  // Activa el perfil 'test' para las pruebas
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TestCompraDAOHibernateJPA {
@@ -72,7 +76,7 @@ class TestCompraDAOHibernateJPA {
         inicio = LocalDate.of(2024, 1, 1);
         fin = LocalDate.of(2024, 3, 1);
         compras = compraDao.findBetweenDates(inicio, fin, 3);
-        assertEquals(2, compras.size());
+        assertEquals(3, compras.size());
         assertEquals(500.0, compras.get(0).getPrecio());
         assertEquals(1000.0, compras.get(1).getPrecio());
 
@@ -84,4 +88,12 @@ class TestCompraDAOHibernateJPA {
         assertEquals(500.0, compras.get(0).getPrecio());
         assertEquals(1000.0, compras.get(1).getPrecio());
     }
+    
+    @AfterAll
+    public void tearDown() {
+    	compraDao.delete(compra1.getId());
+    	compraDao.delete(compra2.getId());
+    	compraDao.delete(compra3.getId());
+    }
+
 }

@@ -40,8 +40,8 @@ public class PersistenceConfig {
         emf.setJpaPropertyMap(Map.of(
             "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect",
             "hibernate.hbm2ddl.auto", "update",  // or create, create-drop, etc.
-            "hibernate.show_sql", "true",
-            "hibernate.format_sql", "true"
+            "hibernate.show_sql", "false",
+            "hibernate.format_sql", "false"
         ));
         return emf;
     }
