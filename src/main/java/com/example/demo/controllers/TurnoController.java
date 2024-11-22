@@ -16,18 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.TurnoDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Turno;
-import com.example.demo.persistencia.clases.entidades.Usuario;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 
 @RestController
-@RequestMapping("/api/turno")
+@RequestMapping("/api/turnos/")
+@Tag(name="Turnos", description="CRUD de los turnos en los que podrán trabajar los responsables de turnos")
 public class TurnoController {
 	@Autowired
 	private TurnoDAOHibernateJPA turnoDAO;
 	
-	@PostMapping("/createTurno")
+	@PostMapping()
+	@Operation(summary="Crear un turno")
 	public ResponseEntity<Turno> createUsuario(@RequestBody Turno turno){
 		try {
 			Turno turnoPersistido = turnoDAO.persist(turno);
@@ -37,7 +40,8 @@ public class TurnoController {
 		}		
 	}
 	
-	@PutMapping("/updateTurno")
+	@PutMapping()
+	@Operation(summary="Actualizar un turno")
 	public ResponseEntity<Turno> updateTurno(@RequestBody Turno turno){
 		try {
 			turnoDAO.update(turno);
@@ -48,7 +52,8 @@ public class TurnoController {
 		}
 	}
 	
-	@DeleteMapping("/deleteTurnoById/{id}")
+	@DeleteMapping("{id}")
+	@Operation(summary="Eliminar un turno por su Id")
 	public ResponseEntity<Turno> deleteTurnoById(@PathVariable long id){
 		try {
 			turnoDAO.delete(id);
@@ -58,7 +63,8 @@ public class TurnoController {
 			return new ResponseEntity<Turno>(HttpStatus.NO_CONTENT);	
 		}
 	}
-	@DeleteMapping("/deleteTurno")
+	@DeleteMapping()
+	@Operation(summary="Eliminar un turno")
 	public ResponseEntity<Turno> deleteUsuario(@RequestBody Turno turno){
 		try {
 			turnoDAO.delete(turno);
@@ -69,10 +75,13 @@ public class TurnoController {
 		}
 	}
 	
-	@GetMapping("/getTurnoById/{id}")
+	@GetMapping("{id}")
+	@Operation(summary="Recuperar un turno por su Id")
 	public ResponseEntity<Turno> getTurnoById(@PathVariable long id){
 		try {
 			Turno turno = turnoDAO.findById(id);
+			if(turno == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return new ResponseEntity<Turno>(turno, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -80,7 +89,8 @@ public class TurnoController {
 		}
 	}
 	
-	@GetMapping("/getTurnos")
+	@GetMapping()
+	@Operation(summary="Recuperar todos los turnos")
 	public ResponseEntity<List<Turno>> getTurnos(){		
 		try {
 			List<Turno> turnos = turnoDAO.findAll();
@@ -89,7 +99,9 @@ public class TurnoController {
 			return new ResponseEntity<List<Turno>>(HttpStatus.NO_CONTENT);
 		}		
 	}
-	@GetMapping("/getTurnosOrderedByInitialHour")
+	
+	@GetMapping("/ordenados-por-hora")
+	@Operation(summary="Recuperar todos los turnos ordenados por hora de inicio")
 	public ResponseEntity<List<Turno>> getTurnosOrderedByInitialHour(){		
 		try {
 			List<Turno> turnos = turnoDAO.findAllOrderedByInitialHour();

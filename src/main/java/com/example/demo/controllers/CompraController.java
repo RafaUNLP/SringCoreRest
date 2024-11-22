@@ -18,17 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.persistencia.clases.DAO.CompraDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Compra;
 
-
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/api/compra")
+@RequestMapping("/api/compras/")
 public class CompraController {
 	
 	@Autowired
 	private CompraDAOHibernateJPA compraDAO;
 	
-	@PostMapping("/createCompra")
+	@PostMapping()
+	@Operation(summary="Crear una compra")
 	public ResponseEntity<Compra> createCompra(@RequestBody Compra compra){
 		try {
 			Compra compraPersistida = compraDAO.persist(compra);
@@ -38,7 +39,8 @@ public class CompraController {
 		}		
 	}
 	
-	@PutMapping("/updateCompra")
+	@PutMapping()
+	@Operation(summary="Actualizar una compra")
 	public ResponseEntity<Compra> updateCompra(@RequestBody Compra compra){
 		try {
 			compraDAO.update(compra);
@@ -49,8 +51,9 @@ public class CompraController {
 		}
 	}
 	
-	@DeleteMapping("/deleteCompraById")
-	public ResponseEntity<Compra> deleteCompraById(@RequestBody long id){
+	@DeleteMapping("{id}")
+	@Operation(summary="Eliminar una compra por su Id")
+	public ResponseEntity<Compra> deleteCompraById(@PathVariable long id){
 		try {
 			compraDAO.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -60,8 +63,9 @@ public class CompraController {
 		}
 	}
 	
-	@DeleteMapping("/deleteCompra")
-	public ResponseEntity<Compra> deleteUsuario(@RequestBody Compra compra){
+	@DeleteMapping()
+	@Operation(summary="Eliminar una compra")
+	public ResponseEntity<Compra> deleteCompra(@RequestBody Compra compra){
 		try {
 			compraDAO.delete(compra);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -71,10 +75,13 @@ public class CompraController {
 		}
 	}
 	
-	@GetMapping("/getCompraById/{id}")
+	@GetMapping("{id}")
+	@Operation(summary="Recuperar una compra por su Id")
 	public ResponseEntity<Compra> getCompraById(@PathVariable long id){
 		try {
 			Compra compra = compraDAO.findById(id);
+			if(compra == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return new ResponseEntity<Compra>(compra, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -82,7 +89,8 @@ public class CompraController {
 		}
 	}
 	
-	@GetMapping("/getCompras")
+	@GetMapping()
+	@Operation(summary="Recuperar todas las compras")
 	public ResponseEntity<List<Compra>> getCompras(){		
 		try {
 			List<Compra> compras = compraDAO.findAll();
@@ -91,10 +99,11 @@ public class CompraController {
 			return new ResponseEntity<List<Compra>>(HttpStatus.NO_CONTENT);
 		}		
 	}
-	@GetMapping("/getComprasBetweenDates")
+	@GetMapping("between-dates")
+	@Operation(summary="Recuperar las compras entre dos fechas, puediendo optar por un máximo")
 	public ResponseEntity<List<Compra>> getCompras(@RequestBody int max, @RequestBody LocalDate fechaInicio, @RequestBody LocalDate fechaFin ){		
 		try {
-			if (max == 0) {				
+			if (max > 0) {				
 				List<Compra> compras = compraDAO.findBetweenDates(fechaInicio, fechaFin, max);
 				return new ResponseEntity<List<Compra>>(compras, HttpStatus.OK);
 			}else {

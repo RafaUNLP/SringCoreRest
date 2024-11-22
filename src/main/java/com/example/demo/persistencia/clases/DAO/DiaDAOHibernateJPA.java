@@ -2,6 +2,7 @@ package com.example.demo.persistencia.clases.DAO;
 
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.PersistenceException;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +18,22 @@ public class DiaDAOHibernateJPA extends GenericDAOHibernateJPA<Dia> implements D
     }
 
     @Override
+    public Dia persist(Dia dia) {
+        try {
+        	Dia previo = this.findByEnumDiaQuery(dia.getEnumDia());
+        	if(previo != null)
+        		throw new RuntimeException("Ya existe el día " + previo.getEnumDia());
+            em.persist(dia); 
+            return dia;
+        } catch (RuntimeException e) {
+            throw new PersistenceException("Error al persistir la entidad: ", e);
+        }
+    }
+    
+    @Override
     public Dia findByEnumDia(EnumDia enumerativo) {
         try {
-            return em.createQuery("SELECT d FROM Dia d WHERE d.enumDia = :enumerativo", this.entityClass)
-                     .setParameter("enumerativo", enumerativo)
-                     .getSingleResult();
+            return this.findByEnumDiaQuery(enumerativo);
         } catch (NoResultException e) {
             throw new NoResultException("No se encontró una instancia de Dia con el enum " + enumerativo.toString());
         } catch (NonUniqueResultException e) {
@@ -30,5 +42,11 @@ public class DiaDAOHibernateJPA extends GenericDAOHibernateJPA<Dia> implements D
         } catch (Exception e) {
             throw e;  // Se puede lanzar la excepción original
         }
+    }
+    
+    private Dia findByEnumDiaQuery (EnumDia enumerativo) {
+    	return em.createQuery("SELECT d FROM Dia d WHERE d.enumDia = :enumerativo", this.entityClass)
+                .setParameter("enumerativo", enumerativo)
+                .getSingleResult();
     }
 }

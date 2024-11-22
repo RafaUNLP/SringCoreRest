@@ -25,7 +25,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public T persist(T entity) {
         try {
-            em.persist(entity);  // Persistimos la entidad
+            em.merge(entity);
             return entity;
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al persistir la entidad", e);

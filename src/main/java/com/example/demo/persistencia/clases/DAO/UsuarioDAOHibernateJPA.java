@@ -26,7 +26,7 @@ public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> impl
                      .setParameter("dni", dni)
                      .getSingleResult();
         } catch (NoResultException e) {
-            return null;  // Puedes retornar null si no se encuentra el usuario
+            return null;
         } catch (NonUniqueResultException e) {
             throw new IllegalStateException("Más de un usuario encontrado con el DNI: " + dni);
         }
@@ -36,13 +36,13 @@ public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> impl
     public List<Usuario> findByRol(Rol rol) {
         TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.rol.nombre = :rol ORDER BY u.nombre ASC", this.entityClass);
         query.setParameter("rol", rol.getNombre());
-        return query.getResultList();  // El ciclo de vida del EntityManager es manejado por Spring
+        return query.getResultList();
     }
     
     @Override
     public List<Usuario> findAllOrderedByNameAsc() {
         TypedQuery<Usuario> query = em.createQuery(
             "SELECT u FROM Usuario u ORDER BY u.nombre ASC", this.entityClass);
-        return query.getResultList();  // El ciclo de vida del EntityManager es manejado por Spring
+        return query.getResultList();
     }
 }

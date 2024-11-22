@@ -16,16 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.MenuDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Menu;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/api/menu")
+@RequestMapping("/api/menus/")
+@Tag(name="Menus", description="CRUD de menus")
 public class MenuController {
 	
 	@Autowired
 	private MenuDAOHibernateJPA menuDAO;
 	
-	@PostMapping("/createMenu")
+	@PostMapping()
+	@Operation(summary="Crear un menu")
 	public ResponseEntity<Menu> createMenu(@RequestBody Menu menu){
 		try {
 			Menu menuPersistido = menuDAO.persist(menu);
@@ -34,7 +39,8 @@ public class MenuController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
-	@PutMapping("/updateMenu")
+	@PutMapping()
+	@Operation(summary="Actualizar un menu")
 	public ResponseEntity<Menu> updateMenu(@RequestBody Menu menu){
 		try {
 			menuDAO.update(menu);
@@ -45,8 +51,9 @@ public class MenuController {
 		}
 	}
 	
-	@DeleteMapping("/deleteMenuById")
-	public ResponseEntity<Menu> deleteMenuById(@RequestBody long id){
+	@DeleteMapping("{id}")
+	@Operation(summary="Eliminar un menu por su Id")
+	public ResponseEntity<Menu> deleteMenuById(@PathVariable long id){
 		try {
 			menuDAO.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -55,7 +62,8 @@ public class MenuController {
 			return new ResponseEntity<Menu>(HttpStatus.NO_CONTENT);	
 		}
 	}
-	@DeleteMapping("/deleteMenu")
+	@DeleteMapping()
+	@Operation(summary="Eliminar un menu")
 	public ResponseEntity<Menu> deleteMenu(@RequestBody Menu menu){
 		try {
 			menuDAO.delete(menu);
@@ -66,10 +74,13 @@ public class MenuController {
 		}
 	}
 	
-	@GetMapping("/getMenuById/{id}")
+	@GetMapping("{id}")
+	@Operation(summary="Recuperar un menu por su Id")
 	public ResponseEntity<Menu> getMenuById(@PathVariable long id){
 		try {
 			Menu menu= menuDAO.findById(id);
+			if(menu == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 			return new ResponseEntity<Menu>(menu, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -77,7 +88,8 @@ public class MenuController {
 		}
 	}
 	
-	@GetMapping("/getMenus")
+	@GetMapping()
+	@Operation(summary="Recuperar todos los menus")
 	public ResponseEntity<List<Menu>> getMenus(){		
 		try {
 			List<Menu> menus= menuDAO.findAll();
@@ -86,7 +98,8 @@ public class MenuController {
 			return new ResponseEntity<List<Menu>>(HttpStatus.NO_CONTENT);
 		}		
 	}
-	@GetMapping("/getMenusVegetarians")
+	@GetMapping("vegetarianos")
+	@Operation(summary="Recuperar los menus vegetarianos")
 	public ResponseEntity<List<Menu>> getMenusVegetarians(){		
 		try {
 			List<Menu> menus= menuDAO.findVegetarians();
@@ -95,7 +108,8 @@ public class MenuController {
 			return new ResponseEntity<List<Menu>>(HttpStatus.NO_CONTENT);
 		}		
 	}
-	@GetMapping("/getMenusStandars")
+	@GetMapping("estandar")
+	@Operation(summary="Recuperar los menus estandar")
 	public ResponseEntity<List<Menu>> getMenusStandars(){		
 		try {
 			List<Menu> menus= menuDAO.findStandards();

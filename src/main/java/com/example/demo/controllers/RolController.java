@@ -17,16 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Rol;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 
 @RestController
-@RequestMapping("/api/rol")
+@RequestMapping("/api/roles/")
+@Tag(name="Roles", description="CRUD de roles para los usuarios")
 public class RolController {
 	@Autowired
 	private RolDAOHibernateJPA rolDAO;
 	
-	@PostMapping("/createRol")
+	@PostMapping()
+	@Operation(summary="Crear un rol")
 	public ResponseEntity<Rol> createUsuario(@RequestBody Rol rol){
 		try {
 			Rol rolPersistido = rolDAO.persist(rol);
@@ -36,7 +40,8 @@ public class RolController {
 		}		
 	}
 	
-	@PutMapping("/updateRol")
+	@PutMapping()
+	@Operation(summary="Actualizar un rol")
 	public ResponseEntity<Rol> updateRol(@RequestBody Rol rol){
 		try {
 			rolDAO.update(rol);
@@ -47,7 +52,8 @@ public class RolController {
 		}
 	}
 	
-	@DeleteMapping("/deleteRolById/{id}")
+	@DeleteMapping("{id}")
+	@Operation(summary="Eliminar un rol por su Id")
 	public ResponseEntity<Rol> deleteRolById(@PathVariable long id){
 		try {
 			rolDAO.delete(id);
@@ -58,7 +64,8 @@ public class RolController {
 		}
 	}
 	
-	@DeleteMapping("/deleteRol")
+	@DeleteMapping()
+	@Operation(summary="Eliminar un rol")
 	public ResponseEntity<Rol> deleteRol(@RequestBody Rol rol){
 		try {
 			rolDAO.delete(rol);
@@ -69,10 +76,13 @@ public class RolController {
 		}
 	}
 	
-	@GetMapping("/getRolById/{id}")
+	@GetMapping("{id}")
+	@Operation(summary="Recuperar un rol por su Id")
 	public ResponseEntity<Rol> getRolById(@PathVariable long id){
 		try {
 			Rol rol = rolDAO.findById(id);
+			if(rol == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return new ResponseEntity<Rol>(rol, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -80,10 +90,11 @@ public class RolController {
 		}
 	}
 	
-	@GetMapping("/getRolByName/{name}")
-	public ResponseEntity<Rol> getRolByName(@PathVariable String name){
+	@GetMapping("{nombre}")
+	@Operation(summary="Recuperar un rol por su nombre")
+	public ResponseEntity<Rol> getRolByName(@PathVariable String nombre){
 		try {
-			Rol rol = rolDAO.findByName(name);
+			Rol rol = rolDAO.findByName(nombre);
 			return new ResponseEntity<Rol>(rol, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -91,7 +102,8 @@ public class RolController {
 		}
 	}
 	
-	@GetMapping("/getRoles")
+	@GetMapping()
+	@Operation(summary="Recuperar todos los roles")
 	public ResponseEntity<List<Rol>> getRoles(){		
 		try {
 			List<Rol> roles= rolDAO.findAll();

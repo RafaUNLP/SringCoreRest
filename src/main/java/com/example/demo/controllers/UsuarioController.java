@@ -17,17 +17,21 @@ import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/usuarios/")
+@Tag(name="Usuarios", description="CRUD de usuarios")
 public class UsuarioController {
 	
 	@Autowired
 	private UsuarioDAOHibernateJPA usuarioDAO;
 	
-	@PostMapping("/createUsuario")
-	public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario){
+	@PostMapping()
+	@Operation(summary="Crear un usuario")
+	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
 		try {
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
@@ -36,8 +40,9 @@ public class UsuarioController {
 		}		
 	}
 	
-	@PutMapping("/updateUsuario")
-	public ResponseEntity<Usuario> updateUsuario(@RequestBody Usuario usuario){
+	@PutMapping()
+	@Operation(summary="Actualizar un usuario")
+	public ResponseEntity<Usuario> update(@RequestBody Usuario usuario){
 		try {
 			usuarioDAO.update(usuario);
 			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
@@ -47,8 +52,9 @@ public class UsuarioController {
 		}
 	}
 	
-	@DeleteMapping("/deleteUsuarioById/{id}")
-	public ResponseEntity<Usuario> deleteUsuarioById(@PathVariable long id){
+	@DeleteMapping("{id}")
+	@Operation(summary="Recuperar un usuario por su Id")
+	public ResponseEntity<Usuario> deleteById(@PathVariable long id){
 		try {
 			usuarioDAO.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -58,8 +64,9 @@ public class UsuarioController {
 		}
 	}
 	
-	@DeleteMapping("/deleteUsuario")
-	public ResponseEntity<Usuario> deleteUsuario(@RequestBody Usuario usuario){
+	@DeleteMapping()
+	@Operation(summary="Eliminar un usuario")
+	public ResponseEntity<Usuario> delete(@RequestBody Usuario usuario){
 		try {
 			usuarioDAO.delete(usuario);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -70,10 +77,13 @@ public class UsuarioController {
 	}
 	
 	
-	@GetMapping("/getUsuarioById/{id}")
-	public ResponseEntity<Usuario> getUsuarioById(@PathVariable long id){
+	@GetMapping("{id}")
+	@Operation(summary="Recupear un usuario por su Id")
+	public ResponseEntity<Usuario> getById(@PathVariable long id){
 		try {
 			Usuario usuario = usuarioDAO.findById(id);
+			if(usuario == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -81,8 +91,9 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("/getUsuarioByDni/{dni}")
-	public ResponseEntity<Usuario> getUsuarioByDni(@PathVariable String dni){
+	@GetMapping("dni/{dni}")
+	@Operation(summary="Recupear un usuario por su DNI")
+	public ResponseEntity<Usuario> getByDni(@PathVariable String dni){
 		try {
 			Usuario usuario = usuarioDAO.findByDni(dni);
 			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
@@ -92,8 +103,9 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("/getUsuariosByRol/{rol}")
-	public ResponseEntity<List<Usuario>> getUsuariosByRol(@PathVariable Rol rol){
+	@GetMapping("rol/{rol}")
+	@Operation(summary="Recupear los usuarios que tienen un determinado rol")
+	public ResponseEntity<List<Usuario>> getByRol(@PathVariable Rol rol){
 		try {
 			List<Usuario> usuarios = usuarioDAO.findByRol(rol);
 			return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
@@ -104,8 +116,9 @@ public class UsuarioController {
 	}	
 	
 	
-	@GetMapping("/getUsuarios")
-	public ResponseEntity<List<Usuario>> getUsuarios(){		
+	@GetMapping()
+	@Operation(summary="Recupear todos los usuarios")
+	public ResponseEntity<List<Usuario>> getAll(){		
 		try {
 			List<Usuario> usuarios = usuarioDAO.findAll();
 			return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
@@ -115,8 +128,9 @@ public class UsuarioController {
 	}
 	
 
-	@GetMapping("/getUsuariosOrderedByNameAsc")
-	public ResponseEntity<List<Usuario>> getUsuariosOrderedByNameAsc(){
+	@GetMapping("/ordenados-por-nombre")
+	@Operation(summary="Recupear todos los usuarios ordenados por nombre")
+	public ResponseEntity<List<Usuario>> getAllAcending(){
 		try {
 			List<Usuario> usuarios = usuarioDAO.findAllOrderedByNameAsc();
 			return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);

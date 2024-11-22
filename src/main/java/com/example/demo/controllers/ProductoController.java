@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.persistencia.clases.DAO.ProductoDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Producto;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/api/producto")
+@RequestMapping("/api/productos/")
+@Tag(name="Productos", description="CRUD de productos")
 public class ProductoController {
 	@Autowired
 	private ProductoDAOHibernateJPA productoDAO;
 
-	@PostMapping("/createProducto")
+	@PostMapping()
+	@Operation(summary="Crear un producto")
 	public ResponseEntity<Producto> createProducto(@RequestBody Producto producto){
 		try {
 			Producto productoPersistido = productoDAO.persist(producto);
@@ -35,7 +39,8 @@ public class ProductoController {
 		}		
 	}
 	
-	@PutMapping("/updateProducto")
+	@PutMapping()
+	@Operation(summary="Actualizar un producto")
 	public ResponseEntity<Producto> updateProducto(@RequestBody Producto producto){
 		try {
 			productoDAO.update(producto);
@@ -46,7 +51,8 @@ public class ProductoController {
 		}
 	}
 	
-	@DeleteMapping("/deleteProductoById/{id}")
+	@DeleteMapping("{id}")
+	@Operation(summary="Eliminar un producto por su Id")
 	public ResponseEntity<Producto> deleteProductoById(@PathVariable long id){
 		try {
 			productoDAO.delete(id);
@@ -56,7 +62,8 @@ public class ProductoController {
 			return new ResponseEntity<Producto>(HttpStatus.NO_CONTENT);	
 		}
 	}
-	@DeleteMapping("/deleteProducto")
+	@DeleteMapping()
+	@Operation(summary="Eliminar un producto")
 	public ResponseEntity<Producto> deleteProducto(@RequestBody Producto producto ){
 		try {
 			productoDAO.delete(producto);
@@ -67,10 +74,13 @@ public class ProductoController {
 		}
 	}
 	
-	@GetMapping("/getProductoById/{id}")
+	@GetMapping("{id}")
+	@Operation(summary="Recuperar un producto por su Id")
 	public ResponseEntity<Producto> getProductoById(@PathVariable long id){
 		try {
 			Producto producto= productoDAO.findById(id);
+			if(producto == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return new ResponseEntity<Producto>(producto, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -78,7 +88,8 @@ public class ProductoController {
 		}
 	}
 	
-	@GetMapping("/getProductos")
+	@GetMapping()
+	@Operation(summary="Recuperar todos los productos")
 	public ResponseEntity<List<Producto>> getProductos(){		
 		try {
 			List<Producto> producto = productoDAO.findAll();
@@ -88,7 +99,7 @@ public class ProductoController {
 		}		
 	}
 	
-	@GetMapping("/getProductosOrderedByName")
+	@GetMapping("/ordenados-por-nombre")
 	public ResponseEntity<List<Producto>> getProductosOrderedByNameAsc(){
 		try {
 			List<Producto> productos= productoDAO.findAllOrderedByName();

@@ -1,5 +1,8 @@
 package com.example.demo.persistencia.clases.entidades;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -10,6 +13,15 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(
+	    use = JsonTypeInfo.Id.NAME, 
+	    include = JsonTypeInfo.As.PROPERTY, 
+	    property = "tipoMenu"  // El nombre del campo que se usará para identificar el tipo
+	)
+	@JsonSubTypes({
+	    @JsonSubTypes.Type(value = MenuEstandar.class, name = "menuestandar"),
+	    @JsonSubTypes.Type(value = MenuVegetariano.class, name = "menuvegetariano")
+	})
 public abstract class Menu extends Item{
 
 	@NotNull @DecimalMin(value = "0.0", message = "El precio debe ser al menos 0.0")

@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.time.LocalDate;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.persistencia.clases.DAO.SugerenciaDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Sugerencia;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/api/sugerencia")
+@RequestMapping("/api/sugerencias/")
+@Tag(name="Sugerencias", description="CRUD de sugerencias de los usuarios")
 public class SugerenciaController {
 	
 	@Autowired
 	private SugerenciaDAOHibernateJPA sugerenciaDAO;
 	
 	
-	@PostMapping("/createSugerencia")
+	@PostMapping()
+	@Operation(summary="Crear una sugerencia")
 	public ResponseEntity<Sugerencia> createSugerencia(@RequestBody Sugerencia sugerencia){
 		try {
 			Sugerencia sugerenciaPersistida = sugerenciaDAO.persist(sugerencia);
@@ -39,7 +44,8 @@ public class SugerenciaController {
 		}		
 	}
 	
-	@PutMapping("/updateSugerencia")
+	@PutMapping()
+	@Operation(summary="Actualizar una sugerencia")
 	public ResponseEntity<Sugerencia> updateUsuario(@RequestBody Sugerencia sugerencia){
 		try {
 			sugerenciaDAO.update(sugerencia);
@@ -50,8 +56,9 @@ public class SugerenciaController {
 		}
 	}
 	
-	@DeleteMapping("/deleteSugerenciaById")
-	public ResponseEntity<Sugerencia> deleteSugerenciaById(@RequestBody long id){
+	@DeleteMapping("{id}")
+	@Operation(summary="Eliminar una sugerencia por su Id")
+	public ResponseEntity<Sugerencia> deleteSugerenciaById(@PathVariable long id){
 		try {
 			sugerenciaDAO.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -61,7 +68,8 @@ public class SugerenciaController {
 		}
 	}
 	
-	@DeleteMapping("/deleteSugerencia")
+	@DeleteMapping()
+	@Operation(summary="Eliminar una sugerencia")
 	public ResponseEntity<Sugerencia> deleteSugerencia(@RequestBody Sugerencia sugerencia){
 		try {
 			sugerenciaDAO.delete(sugerencia);
@@ -73,7 +81,8 @@ public class SugerenciaController {
 	}	
 	
 	
-	@GetMapping("/getSugerencias")
+	@GetMapping()
+	@Operation(summary="Recuperar todas las sugerencias")
 	public ResponseEntity<List<Sugerencia>> getSugerencia(){
 		try {
 			List<Sugerencia> sugerencias = sugerenciaDAO.findAll();
@@ -84,10 +93,13 @@ public class SugerenciaController {
 		}
 	}	
 	
-	@GetMapping("/getSugerenciaById/{id}")
+	@GetMapping("{id}")
+	@Operation(summary="Recuperar una sugerencia por su Id")
 	public ResponseEntity<Sugerencia> getSugerenciaById(@PathVariable long id){
 		try {
 			Sugerencia sugerencia = sugerenciaDAO.findById(id);
+			if(sugerencia == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return new ResponseEntity<Sugerencia>(sugerencia, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -95,9 +107,12 @@ public class SugerenciaController {
 		}
 	}
 	
-	@GetMapping("/getSugerenciasByDate/{date}")
-	public ResponseEntity<List<Sugerencia>> getSugerenciasByDate(@PathVariable LocalDate date, @RequestParam  int max){
+	@GetMapping("/de-una-fecha/{date}/{max}")
+	@Operation(summary="Recuperar todas las sugerencias de una fecha")
+	public ResponseEntity<List<Sugerencia>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable  int max){
 		try {
+			if(max < 1)
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			List<Sugerencia> sugerencias = sugerenciaDAO.findByDate(date, max);
 			return new ResponseEntity<List<Sugerencia>>(sugerencias, HttpStatus.OK);
 		}
@@ -106,28 +121,25 @@ public class SugerenciaController {
 		}
 	}
 	
-	@GetMapping("/getSugerenciasOrdereredByDateDesc")
-	public ResponseEntity<List<Sugerencia>> getSugerenciasOrdereredByDateDesc(){
-		try {
-			List<Sugerencia> sugerencias = sugerenciaDAO.findAllOrderedByDateDesc();
-			return new ResponseEntity<List<Sugerencia>>(sugerencias, HttpStatus.OK);
-		}
-		catch(Exception e){
-			return new ResponseEntity<List<Sugerencia>>(HttpStatus.NO_CONTENT);
-		}
-	}	
-	
-	@GetMapping("/getSugerenciasOrdereredByDateAsc")
-	public ResponseEntity<List<Sugerencia>> getSugerenciasOrdereredByDateAsc(){
-		try {
-			List<Sugerencia> sugerencias = sugerenciaDAO.findAllOrderedByDateAsc();
-			return new ResponseEntity<List<Sugerencia>>(sugerencias, HttpStatus.OK);
-		}
-		catch(Exception e){
-			return new ResponseEntity<List<Sugerencia>>(HttpStatus.NO_CONTENT);
-		}
-	}	
-	
+	@GetMapping("ordenadas-por-fecha/{orden}")
+	@Operation(summary="Recuperar todas las sugerencias ordenadas por fecha ('ascendente' o 'descendente')")
+	public ResponseEntity<List<Sugerencia>> getSugerenciasOrdereredByDate(@PathVariable String orden){
+	    try {
+	        List<Sugerencia> sugerencias;
+
+	        if ("ascendente".equalsIgnoreCase(orden)) {
+	            sugerencias = sugerenciaDAO.findAllOrderedByDateAsc();
+	        } else if ("descendente".equalsIgnoreCase(orden)) {
+	            sugerencias = sugerenciaDAO.findAllOrderedByDateDesc();
+	        } else {
+	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	        }
+
+	        return new ResponseEntity<>(sugerencias, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    }
+	}
 	
 	
 
