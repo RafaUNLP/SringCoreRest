@@ -19,10 +19,12 @@ import com.example.demo.persistencia.clases.DAO.CompraDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Compra;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
 
 @RestController
 @RequestMapping("/api/compras/")
+@Tag(name="Compras", description="CRUD de compras")
 public class CompraController {
 	
 	@Autowired
