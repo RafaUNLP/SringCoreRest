@@ -45,4 +45,17 @@ public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> impl
             "SELECT u FROM Usuario u ORDER BY u.nombre ASC", this.entityClass);
         return query.getResultList();
     }
+    
+    public Usuario findByEmail(String email) {
+        try {
+            return em.createQuery("SELECT u FROM Usuario u WHERE u.email = :email", this.entityClass)
+                     .setParameter("email", email)
+                     .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            throw new IllegalStateException("Más de un usuario encontrado con el email: " + email);
+        }
+    }
+
 }
