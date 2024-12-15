@@ -7,6 +7,8 @@ import com.example.demo.persistencia.interfaces.DiaDAO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/dias/")
+@RequestMapping("/api/dias/")
 @Tag(name="Días", description="CRUD de días")
 public class DiaController {
 
@@ -32,6 +34,19 @@ public class DiaController {
             return new ResponseEntity<>(creado, HttpStatus.CREATED);
         } catch (PersistenceException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping
+    @Operation(summary="Recuperar todos los días")
+    public ResponseEntity<List<Dia>> getDias() {
+        try {
+            List<Dia> dias = diaDAO.findAll();
+            if(dias == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(dias, HttpStatus.OK);
+        } catch (PersistenceException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 

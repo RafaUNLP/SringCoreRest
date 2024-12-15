@@ -25,7 +25,8 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public T persist(T entity) {
         try {
-            em.merge(entity);
+            em.persist(entity);
+            em.flush();
             return entity;
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al persistir la entidad", e);
@@ -48,7 +49,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public T findById(long id) {
         try {
-            return em.find(entityClass, id);  // Usamos find para buscar la entidad
+            return em.find(entityClass, id);
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al buscar la entidad por ID", e);
         }
@@ -57,7 +58,6 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public List<T> findAll() {
         try {
-            // Consulta para obtener todas las entidades
             return em.createQuery("FROM " + entityClass.getName(), entityClass).getResultList();
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al obtener todas las entidades", e);
@@ -67,7 +67,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public T update(T entity) {
         try {
-            return em.merge(entity);  // Usamos merge para actualizar la entidad
+            return em.merge(entity);
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al actualizar la entidad", e);
         }
@@ -76,7 +76,8 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public void delete(T entity) {
         try {
-            em.remove(em.merge(entity));  // Si la entidad está gestionada, no es necesario hacer merge
+            em.remove(em.merge(entity));
+            em.flush();
         } catch (RuntimeException e) {
             throw new PersistenceException("Error al eliminar la entidad", e);
         }
@@ -88,6 +89,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
             T entity = em.find(entityClass, id);  // Buscamos la entidad por ID
             if (entity != null) {
                 em.remove(entity);  // Eliminamos la entidad si se encuentra
+                em.flush();
                 return true;
             }
             return false;

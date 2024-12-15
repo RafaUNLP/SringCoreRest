@@ -48,6 +48,12 @@ public class UsuarioController {
 	@Operation(summary="Crear un usuario")
 	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
 		try {
+			Usuario usuarioEmail = usuarioDAO.findByEmail(usuario.getEmail());
+			if(usuarioEmail != null)
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			Usuario usuarioDni = usuarioDAO.findByDni(usuario.getDni());
+			if(usuarioDni != null)
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
