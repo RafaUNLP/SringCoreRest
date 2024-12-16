@@ -39,7 +39,7 @@ public class AuthController {
 				respuesta = new LoginResponse("No se encotró el usuario", null);
 				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.NOT_FOUND);
 			}
-			if(!usuario.getPassword().equals(usuario.getPassword())) { //tenemos que agregar el hasheo o spring security
+			if(!usuario.getPassword().equals(pedido.getPassword())) { //tenemos que agregar el hasheo o spring security
 				respuesta = new LoginResponse("Credenciales inválidas", null);
 				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.UNAUTHORIZED);
 			}
