@@ -27,7 +27,7 @@ public class Dia extends EntidadBase{
 		this.enumDia = enumDia;
 	}
 
-	public MenuVegetariano getMenuVegenariano() {
+	public MenuVegetariano getMenuVegetariano() {
 		return menuVegetariano;
 	}
 
