@@ -18,7 +18,7 @@ import java.util.List;
 
 
 //@WebFilter(filterName = "jwt-filter", urlPatterns = "*")
-@Component
+//@Component
 public class TokenFilter implements Filter {
 
 	@Autowired
