@@ -15,7 +15,7 @@ public class Dia extends EntidadBase{
 	
 	@OneToOne
     @JoinColumn(name = "menu_vegetariano_id", referencedColumnName = "id")
-	private MenuVegetariano menuVegenariano;
+	private MenuVegetariano menuVegetariano;
 	
 	@OneToOne
     @JoinColumn(name = "menu_estandar_id", referencedColumnName = "id")
@@ -28,11 +28,11 @@ public class Dia extends EntidadBase{
 	}
 
 	public MenuVegetariano getMenuVegenariano() {
-		return menuVegenariano;
+		return menuVegetariano;
 	}
 
 	public void setMenuVegenariano(MenuVegetariano menuVegenariano) {
-		this.menuVegenariano = menuVegenariano;
+		this.menuVegetariano = menuVegenariano;
 	}
 
 	public MenuEstandar getMenuEstandar() {
