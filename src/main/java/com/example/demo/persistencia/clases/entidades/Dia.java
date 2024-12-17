@@ -31,8 +31,8 @@ public class Dia extends EntidadBase{
 		return menuVegetariano;
 	}
 
-	public void setMenuVegenariano(MenuVegetariano menuVegenariano) {
-		this.menuVegetariano = menuVegenariano;
+	public void setMenuVegetariano(MenuVegetariano menuVegetariano) {
+		this.menuVegetariano = menuVegetariano;
 	}
 
 	public MenuEstandar getMenuEstandar() {
