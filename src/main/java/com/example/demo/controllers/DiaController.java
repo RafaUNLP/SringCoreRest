@@ -2,7 +2,10 @@ package com.example.demo.controllers;
 
 import com.example.demo.persistencia.clases.entidades.Dia;
 import com.example.demo.persistencia.clases.entidades.EnumDia;
+import com.example.demo.persistencia.clases.entidades.MenuEstandar;
+import com.example.demo.persistencia.clases.entidades.MenuVegetariano;
 import com.example.demo.persistencia.interfaces.DiaDAO;
+import com.example.demo.persistencia.interfaces.MenuDAO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +28,8 @@ public class DiaController {
 
     @Autowired
     private DiaDAO diaDAO;
+    @Autowired
+    private MenuDAO menuDAO;
 
     @PostMapping
     @Operation(summary="Crear un nuevo Dia si no existe previamente")
@@ -84,9 +89,22 @@ public class DiaController {
     @Operation(summary="Actualizar un día")
     public ResponseEntity<Dia> updateDia(@PathVariable long id, @RequestBody Dia dia) {
         try {
-            if (!diaDAO.exist(id)) {
+        	Dia anterior = diaDAO.findById(id);
+            if (anterior == null)
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
+            
+            dia.setId(id);
+            
+            if(dia.getMenuEstandar() == null)
+            	dia.setMenuEstandar(anterior.getMenuEstandar());
+            else 
+            	dia.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
+            
+            if(dia.getMenuVegenariano() == null)
+            	dia.setMenuVegenariano(anterior.getMenuVegenariano());
+            else 
+            	dia.setMenuVegenariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegenariano()));
+            
             Dia actualizado = diaDAO.update(dia);
             return new ResponseEntity<>(actualizado, HttpStatus.OK);
         } catch (PersistenceException e) {
