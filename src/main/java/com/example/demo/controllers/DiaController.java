@@ -100,10 +100,10 @@ public class DiaController {
             else 
             	dia.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
             
-            if(dia.getMenuVegenariano() == null)
-            	dia.setMenuVegenariano(anterior.getMenuVegenariano());
+            if(dia.getMenuVegetariano() == null)
+            	dia.setMenuVegetariano(anterior.getMenuVegetariano());
             else 
-            	dia.setMenuVegenariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegenariano()));
+            	dia.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));
             
             Dia actualizado = diaDAO.update(dia);
             return new ResponseEntity<>(actualizado, HttpStatus.OK);
