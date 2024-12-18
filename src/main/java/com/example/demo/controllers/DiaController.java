@@ -95,15 +95,19 @@ public class DiaController {
             
             dia.setId(id);
             
+        /// 	Le saco el seteo del anterior para poder hacer un put de null a la hora de eliminar un menu de un dia en particular
             if(dia.getMenuEstandar() == null)
-            	dia.setMenuEstandar(anterior.getMenuEstandar());
+            	dia.setMenuEstandar(null);
             else 
             	dia.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
             
             if(dia.getMenuVegetariano() == null)
-            	dia.setMenuVegetariano(anterior.getMenuVegetariano());
+            	dia.setMenuVegetariano(null);
             else 
-            	dia.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));
+            	dia.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));             
+            
+        
+        
             
             Dia actualizado = diaDAO.update(dia);
             return new ResponseEntity<>(actualizado, HttpStatus.OK);
