@@ -3,8 +3,11 @@ package com.example.demo.persistencia.clases.entidades;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -14,7 +17,8 @@ public class Usuario extends EntidadBase{
 	@NotNull @Size(min=8,max=8,message="El dni debe contar con 8 caracteres numéricos")
 	private String dni;/*conviene que el dni sea un string para validar mejor y poder tener ceros a la izq*/
 	
-	@NotNull @Size(min=8,message="La contraseña debe contar con al menos 8 caracteres") 
+	@NotNull @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Size(min=8,message="La contraseña debe contar con al menos 8 caracteres") 
 	private String password;
 	
 	@NotNull
@@ -26,10 +30,11 @@ public class Usuario extends EntidadBase{
 	@NotNull @Size(max=30,message="El apellido no debe superar los 30 caracteres")
 	private String apellido;
 	
-    @NotNull //@Email(message = "Correo electrónico inválido")
+    @Email(message = "Correo electrónico inválido")
+    @Column(nullable = false, unique = true)
 	private String email;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "rol_id", referencedColumnName = "id")
     private Rol rol;
     

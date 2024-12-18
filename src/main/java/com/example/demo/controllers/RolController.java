@@ -76,7 +76,7 @@ public class RolController {
 		}
 	}
 	
-	@GetMapping("{id}")
+	@GetMapping("id/{id}")
 	@Operation(summary="Recuperar un rol por su Id")
 	public ResponseEntity<Rol> getRolById(@PathVariable long id){
 		try {
@@ -90,7 +90,7 @@ public class RolController {
 		}
 	}
 	
-	@GetMapping("{nombre}")
+	@GetMapping("nombre/{nombre}")
 	@Operation(summary="Recuperar un rol por su nombre")
 	public ResponseEntity<Rol> getRolByName(@PathVariable String nombre){
 		try {

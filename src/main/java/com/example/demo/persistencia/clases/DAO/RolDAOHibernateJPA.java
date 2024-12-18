@@ -18,15 +18,12 @@ public class RolDAOHibernateJPA extends GenericDAOHibernateJPA<Rol> implements R
     @Override
     public Rol findByName(String nombre) {
         try {
-            // Realizar la consulta para encontrar el rol por nombre
-            return em.createQuery("SELECT r FROM Rol r WHERE r.nombre = :nombre", this.entityClass)
-                    .setParameter("nombre", nombre)
+        	return em.createQuery("SELECT r FROM Rol r WHERE UPPER(r.nombre) LIKE UPPER(:nombre)", this.entityClass)
+                    .setParameter("nombre", "%" + nombre + "%")
                     .getSingleResult();
         } catch (NoResultException e) {
-            // Si no se encuentra un resultado, devolver null
             return null;
         } catch (NonUniqueResultException e) {
-            // Si se encuentran más de un resultado, lanzar una excepción
             throw new IllegalStateException("Más de un rol encontrado con el nombre: " + nombre);
         }
     }

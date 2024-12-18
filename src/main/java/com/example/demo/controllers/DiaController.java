@@ -2,10 +2,15 @@ package com.example.demo.controllers;
 
 import com.example.demo.persistencia.clases.entidades.Dia;
 import com.example.demo.persistencia.clases.entidades.EnumDia;
+import com.example.demo.persistencia.clases.entidades.MenuEstandar;
+import com.example.demo.persistencia.clases.entidades.MenuVegetariano;
 import com.example.demo.persistencia.interfaces.DiaDAO;
+import com.example.demo.persistencia.interfaces.MenuDAO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +22,14 @@ import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceException;
 
 @RestController
-@RequestMapping("/dias/")
+@RequestMapping("/api/dias/")
 @Tag(name="Días", description="CRUD de días")
 public class DiaController {
 
     @Autowired
     private DiaDAO diaDAO;
+    @Autowired
+    private MenuDAO menuDAO;
 
     @PostMapping
     @Operation(summary="Crear un nuevo Dia si no existe previamente")
@@ -32,6 +39,19 @@ public class DiaController {
             return new ResponseEntity<>(creado, HttpStatus.CREATED);
         } catch (PersistenceException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping
+    @Operation(summary="Recuperar todos los días")
+    public ResponseEntity<List<Dia>> getDias() {
+        try {
+            List<Dia> dias = diaDAO.findAll();
+            if(dias == null)
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(dias, HttpStatus.OK);
+        } catch (PersistenceException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -69,9 +89,22 @@ public class DiaController {
     @Operation(summary="Actualizar un día")
     public ResponseEntity<Dia> updateDia(@PathVariable long id, @RequestBody Dia dia) {
         try {
-            if (!diaDAO.exist(id)) {
+        	Dia anterior = diaDAO.findById(id);
+            if (anterior == null)
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
+            
+            dia.setId(id);
+            
+            if(dia.getMenuEstandar() == null)
+            	dia.setMenuEstandar(anterior.getMenuEstandar());
+            else 
+            	dia.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
+            
+            if(dia.getMenuVegenariano() == null)
+            	dia.setMenuVegenariano(anterior.getMenuVegenariano());
+            else 
+            	dia.setMenuVegenariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegenariano()));
+            
             Dia actualizado = diaDAO.update(dia);
             return new ResponseEntity<>(actualizado, HttpStatus.OK);
         } catch (PersistenceException e) {

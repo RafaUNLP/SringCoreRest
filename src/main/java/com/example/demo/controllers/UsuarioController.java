@@ -29,25 +29,16 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioDAOHibernateJPA usuarioDAO;
 	
-	@PostMapping("login")
-	@Operation(summary="Login de un usuario")
-	public ResponseEntity<Usuario> login(@RequestBody String email, @RequestBody String password){
-		try {
-			Usuario usuario = usuarioDAO.findByEmail(email);
-			if(usuario == null)
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-			if(usuario.getPassword() != password) //tenemos que agregar el hasheo o spring security
-				return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
-		}catch(PersistenceException e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
-	}
-	
 	@PostMapping()
 	@Operation(summary="Crear un usuario")
 	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
 		try {
+			Usuario usuarioEmail = usuarioDAO.findByEmail(usuario.getEmail());
+			if(usuarioEmail != null)
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			Usuario usuarioDni = usuarioDAO.findByDni(usuario.getDni());
+			if(usuarioDni != null)
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
