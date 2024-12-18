@@ -95,7 +95,7 @@ public class DiaController {
             
             dia.setId(id);
             
-        /// 	Le saco el seteo del anterior para poder hacer un put de null a la hora de eliminar un menu de un dia en particular
+        ///Le saco el seteo del anterior para poder hacer un put de null a la hora de eliminar un menu de un dia en particular
             if(dia.getMenuEstandar() == null)
             	dia.setMenuEstandar(null);
             else 
