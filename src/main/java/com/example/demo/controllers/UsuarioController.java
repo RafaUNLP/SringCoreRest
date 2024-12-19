@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
@@ -28,6 +30,8 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioDAOHibernateJPA usuarioDAO;
+	@Autowired
+	private RolDAOHibernateJPA rolDAO;
 	
 	@PostMapping()
 	@Operation(summary="Crear un usuario")
@@ -39,6 +43,8 @@ public class UsuarioController {
 			Usuario usuarioDni = usuarioDAO.findByDni(usuario.getDni());
 			if(usuarioDni != null)
 				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			Rol rol = rolDAO.findByName(usuario.getRol().getNombre());
+			usuario.setRol(rol);
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
