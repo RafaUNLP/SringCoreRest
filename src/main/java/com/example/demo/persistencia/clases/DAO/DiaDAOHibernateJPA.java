@@ -45,7 +45,7 @@ public class DiaDAOHibernateJPA extends GenericDAOHibernateJPA<Dia> implements D
     }
     
     private Dia findByEnumDiaQuery (EnumDia enumerativo) {
-    	return em.createQuery("SELECT d FROM Dia d WHERE d.enumDia = :enumerativo", this.entityClass)
+    	return em.createQuery("SELECT d FROM "+ this.entityClass.getName() +" d WHERE d.enumDia = :enumerativo", this.entityClass)
                 .setParameter("enumerativo", enumerativo)
                 .getSingleResult();
     }

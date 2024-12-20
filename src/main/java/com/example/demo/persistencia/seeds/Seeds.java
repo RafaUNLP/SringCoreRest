@@ -37,7 +37,7 @@ public class Seeds {
         if (rolAdmin == null) {
             rolAdmin = new AdministradorRol();
             rolAdmin.setNombre("administrador");
-            rolDAO.persist(rolAdmin);
+            rolDAO.update(rolAdmin);
         } else {
             rolDAO.update(rolAdmin);
         }
@@ -45,7 +45,7 @@ public class Seeds {
         if (rolCliente == null) {
             rolCliente = new ClienteRol();
             rolCliente.setNombre("cliente");
-            rolDAO.persist(rolCliente);
+            rolDAO.update(rolCliente);
         } else {
             rolDAO.update(rolCliente);
         }
@@ -53,7 +53,7 @@ public class Seeds {
         if (rolResponsableDeTurno == null) {
             rolResponsableDeTurno = new ResponsableDeTurnoRol();
             rolResponsableDeTurno.setNombre("responsable-turno");
-            rolDAO.persist(rolResponsableDeTurno);
+            rolDAO.update(rolResponsableDeTurno);
         } else {
             rolDAO.update(rolResponsableDeTurno);
         }
@@ -71,7 +71,7 @@ public class Seeds {
             usuario1.setPassword("password");
             usuario1.setImagen("/img");
             usuario1.setRol(rolAdmin);
-            usuarioDAO.persist(usuario1);
+            usuarioDAO.update(usuario1);
         } else {
             usuarioDAO.update(usuario1);
         }
@@ -85,7 +85,7 @@ public class Seeds {
             usuario2.setPassword("password");
             usuario2.setImagen("/img");
             usuario2.setRol(rolAdmin);
-            usuarioDAO.persist(usuario2);
+            usuarioDAO.update(usuario2);
         } else {
             usuarioDAO.update(usuario2);
         }
@@ -99,54 +99,25 @@ public class Seeds {
             usuario3.setPassword("password");
             usuario3.setImagen("/img");
             usuario3.setRol(rolCliente);
-            usuarioDAO.persist(usuario3);
+            usuarioDAO.update(usuario3);
         } else {
             usuarioDAO.update(usuario3);
         }
 
-        Dia[] dias = new Dia[5];
         EnumDia[] enumDias = {EnumDia.LUNES, EnumDia.MARTES, EnumDia.MIERCOLES, EnumDia.JUEVES, EnumDia.VIERNES};
 
-        for (int i = 0; i < enumDias.length; i++) {
-            try { dias[i] = diaDAO.findByEnumDia(enumDias[i]);}
-            catch (Exception e) {dias[i] = null;}
-        }
-
-        Dia lunes = dias[0]; Dia martes = dias[1]; Dia miercoles = dias[2];Dia jueves = dias[3];Dia viernes = dias[4];
-
-        if (lunes == null) {
-            lunes = new Dia(EnumDia.LUNES);
-            diaDAO.persist(lunes);
-        } else {
-            diaDAO.update(lunes);
-        }
-
-        if (martes == null) {
-            martes = new Dia(EnumDia.MARTES);
-            diaDAO.persist(martes);
-        } else {
-            diaDAO.update(martes);
-        }
-
-        if (miercoles == null) {
-            miercoles = new Dia(EnumDia.MIERCOLES);
-            diaDAO.persist(miercoles);
-        } else {
-            diaDAO.update(miercoles);
-        }
-
-        if (jueves == null) {
-            jueves = new Dia(EnumDia.JUEVES);
-            diaDAO.persist(jueves);
-        } else {
-            diaDAO.update(jueves);
-        }
-
-        if (viernes == null) {
-            viernes = new Dia(EnumDia.VIERNES);
-            diaDAO.persist(viernes);
-        } else {
-            diaDAO.update(viernes);
+        for (EnumDia enumDia : enumDias) {
+            Dia dia = null;
+            
+            //try {dia =  diaDAO.findByEnumDia(enumDia);}
+            //catch (Exception e) {dia = null;}
+            
+            if (dia == null) {
+                dia = new Dia(enumDia);
+                diaDAO.update(dia);
+            } else {
+                diaDAO.update(dia);
+            }
         }
 
         return this;

@@ -1,5 +1,6 @@
 package com.example.demo.persistencia.clases.entidades;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -42,6 +43,9 @@ public abstract class Menu extends Item{
 	
 	@NotNull @Size(max=50,message="La bebida no debe superar los 50 caracteres")
 	private String bebida;
+	
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private String base64;
 
 	public Menu() {}
 	
@@ -53,6 +57,7 @@ public abstract class Menu extends Item{
 		this.platoPrincipal = platoPrincipal;
 		this.postre = postre;
 		this.bebida = bebida;
+		this.base64 = null;
 	}
 
 	public abstract boolean esVegetariano();
@@ -103,6 +108,14 @@ public abstract class Menu extends Item{
 
 	public void setBebida(String bebida) {
 		this.bebida = bebida;
+	}
+	
+	public String getImagenBase64() {
+		return base64;
+	}
+
+	public void setImagenBase64(String imagenBase64) {
+		this.base64 = imagenBase64;
 	}
 
 }
