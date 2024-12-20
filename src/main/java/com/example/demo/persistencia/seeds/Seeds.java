@@ -37,7 +37,7 @@ public class Seeds {
         if (rolAdmin == null) {
             rolAdmin = new AdministradorRol();
             rolAdmin.setNombre("administrador");
-            rolDAO.update(rolAdmin);
+            rolDAO.persist(rolAdmin);
         } else {
             rolDAO.update(rolAdmin);
         }
@@ -45,7 +45,7 @@ public class Seeds {
         if (rolCliente == null) {
             rolCliente = new ClienteRol();
             rolCliente.setNombre("cliente");
-            rolDAO.update(rolCliente);
+            rolDAO.persist(rolCliente);
         } else {
             rolDAO.update(rolCliente);
         }
@@ -53,7 +53,7 @@ public class Seeds {
         if (rolResponsableDeTurno == null) {
             rolResponsableDeTurno = new ResponsableDeTurnoRol();
             rolResponsableDeTurno.setNombre("responsable-turno");
-            rolDAO.update(rolResponsableDeTurno);
+            rolDAO.persist(rolResponsableDeTurno);
         } else {
             rolDAO.update(rolResponsableDeTurno);
         }
@@ -71,7 +71,7 @@ public class Seeds {
             usuario1.setPassword("password");
             usuario1.setImagen("/img");
             usuario1.setRol(rolAdmin);
-            usuarioDAO.update(usuario1);
+            usuarioDAO.persist(usuario1);
         } else {
             usuarioDAO.update(usuario1);
         }
@@ -85,7 +85,7 @@ public class Seeds {
             usuario2.setPassword("password");
             usuario2.setImagen("/img");
             usuario2.setRol(rolAdmin);
-            usuarioDAO.update(usuario2);
+            usuarioDAO.persist(usuario2);
         } else {
             usuarioDAO.update(usuario2);
         }
@@ -99,7 +99,7 @@ public class Seeds {
             usuario3.setPassword("password");
             usuario3.setImagen("/img");
             usuario3.setRol(rolCliente);
-            usuarioDAO.update(usuario3);
+            usuarioDAO.persist(usuario3);
         } else {
             usuarioDAO.update(usuario3);
         }
@@ -109,12 +109,12 @@ public class Seeds {
         for (EnumDia enumDia : enumDias) {
             Dia dia = null;
             
-            //try {dia =  diaDAO.findByEnumDia(enumDia);}
-            //catch (Exception e) {dia = null;}
+            try {dia =  diaDAO.findByEnumDia(enumDia);}
+            catch (Exception e) {dia = null;}
             
             if (dia == null) {
                 dia = new Dia(enumDia);
-                diaDAO.update(dia);
+                diaDAO.persist(dia);
             } else {
                 diaDAO.update(dia);
             }

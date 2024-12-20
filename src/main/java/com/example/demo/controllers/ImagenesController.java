@@ -64,4 +64,38 @@ public class ImagenesController {
      -d @base64 --output output_image.png
      
      * */
+    
+//    @PostMapping("byteTo64")
+//    @Operation(summary="Convertir un arreglo de bytes a Base64")
+//    public ResponseEntity<String> convertBytesToBase64(@RequestParam byte[] bytes) {
+//        try {
+//            if (bytes == null || bytes.length == 0) {
+//                return new ResponseEntity<>("Se recibió un arreglo vació", HttpStatus.BAD_REQUEST);
+//            }
+//
+//            String base64String = Base64.getEncoder().encodeToString(bytes);
+//
+//            return new ResponseEntity<>(base64String, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Error al procesar los bytes: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//
+//    /*curl -X POST -F "file=@/home/rafa/Imágenes/Capturas de pantalla/imagen.png" http://localhost:8080/api/imagenes/codificarPNG*/
+//    
+//    @PostMapping("base64ToByte")
+//    @Operation(summary="Convertir de base64 a un arreglo de bytes")
+//    public ResponseEntity<byte[]> convertBase64ToBytes(@RequestBody String base64String) {
+//        try {
+//            String limpio = base64String.replaceAll("\n", "").replaceAll("\r", "");
+//
+//            byte[] bytes = Base64.getDecoder().decode(limpio);
+//
+//            return ResponseEntity.ok().body(bytes);
+//            
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(("Error: Base64 inválido - " + e.getMessage()).getBytes());
+//        }
+//    }
+    
 }
