@@ -14,6 +14,7 @@ import com.example.demo.persistencia.clases.entidades.Usuario;
 import com.example.demo.persistencia.interfaces.DiaDAO;
 import com.example.demo.persistencia.interfaces.RolDAO;
 import com.example.demo.persistencia.interfaces.UsuarioDAO;
+import com.example.demo.services.PasswordEncoderService;
 
 @Configuration
 public class Seeds {
@@ -24,6 +25,8 @@ public class Seeds {
     private DiaDAO diaDAO;
     @Autowired
     private RolDAO rolDAO;
+    @Autowired
+    private PasswordEncoderService encoder;
 
     @Bean
     public Seeds generateData() {
@@ -68,7 +71,7 @@ public class Seeds {
             usuario1.setNombre("Marcos");
             usuario1.setDni("41106252");
             usuario1.setEmail("marcos@gmail.com");
-            usuario1.setPassword("password");
+            usuario1.setPassword(encoder.encode("password"));
             usuario1.setImagen("/img");
             usuario1.setRol(rolAdmin);
             usuarioDAO.persist(usuario1);
@@ -82,7 +85,7 @@ public class Seeds {
             usuario2.setNombre("Rafael");
             usuario2.setDni("41109313");
             usuario2.setEmail("rafael@gmail.com");
-            usuario2.setPassword("password");
+            usuario2.setPassword(encoder.encode("password"));
             usuario2.setImagen("/img");
             usuario2.setRol(rolAdmin);
             usuarioDAO.persist(usuario2);
@@ -96,7 +99,7 @@ public class Seeds {
             usuario3.setNombre("Diego");
             usuario3.setDni("41107713");
             usuario3.setEmail("diego@gmail.com");
-            usuario3.setPassword("password");
+            usuario3.setPassword(encoder.encode("password"));
             usuario3.setImagen("/img");
             usuario3.setRol(rolCliente);
             usuarioDAO.persist(usuario3);

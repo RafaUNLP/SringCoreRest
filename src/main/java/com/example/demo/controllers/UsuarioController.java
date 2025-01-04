@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
+import com.example.demo.services.PasswordEncoderService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,8 @@ public class UsuarioController {
 	private UsuarioDAOHibernateJPA usuarioDAO;
 	@Autowired
 	private RolDAOHibernateJPA rolDAO;
+	@Autowired
+	private PasswordEncoderService encoder;
 	
 	@PostMapping()
 	@Operation(summary="Crear un usuario")
@@ -45,6 +49,7 @@ public class UsuarioController {
 				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 			Rol rol = rolDAO.findByName(usuario.getRol().getNombre());
 			usuario.setRol(rol);
+			usuario.setPassword(encoder.encode(usuario.getPassword()));
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {

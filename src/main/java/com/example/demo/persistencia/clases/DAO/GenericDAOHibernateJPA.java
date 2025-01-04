@@ -29,7 +29,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
             em.flush();
             return entity;
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al persistir la entidad", e);
+            throw new PersistenceException("Error al persistir la entidad " + this.entityClass.getSimpleName(), e);
         }
     }
 
