@@ -19,11 +19,11 @@ import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
-import com.example.demo.services.PasswordEncoderService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios/")
@@ -35,11 +35,11 @@ public class UsuarioController {
 	@Autowired
 	private RolDAOHibernateJPA rolDAO;
 	@Autowired
-	private PasswordEncoderService encoder;
+	private PasswordEncoder encoder;
 	
 	@PostMapping()
 	@Operation(summary="Crear un usuario")
-	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario usuario){
 		try {
 			Usuario usuarioEmail = usuarioDAO.findByEmail(usuario.getEmail());
 			if(usuarioEmail != null)
@@ -59,7 +59,7 @@ public class UsuarioController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un usuario")
-	public ResponseEntity<Usuario> update(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> update(@Valid @RequestBody Usuario usuario){
 		try {
 			usuarioDAO.update(usuario);
 			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);

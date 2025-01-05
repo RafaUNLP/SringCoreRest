@@ -21,6 +21,7 @@ import com.example.demo.persistencia.clases.entidades.Compra;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/compras/")
@@ -32,7 +33,7 @@ public class CompraController {
 	
 	@PostMapping()
 	@Operation(summary="Crear una compra")
-	public ResponseEntity<Compra> createCompra(@RequestBody Compra compra){
+	public ResponseEntity<Compra> createCompra(@Valid @RequestBody Compra compra){
 		try {
 			Compra compraPersistida = compraDAO.persist(compra);
 			return new ResponseEntity<>(compraPersistida, HttpStatus.CREATED);
@@ -43,7 +44,7 @@ public class CompraController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar una compra")
-	public ResponseEntity<Compra> updateCompra(@RequestBody Compra compra){
+	public ResponseEntity<Compra> updateCompra(@Valid @RequestBody Compra compra){
 		try {
 			compraDAO.update(compra);
 			return new ResponseEntity<Compra>(compra, HttpStatus.OK);

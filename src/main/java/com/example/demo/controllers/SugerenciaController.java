@@ -23,6 +23,7 @@ import com.example.demo.persistencia.clases.entidades.Sugerencia;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/sugerencias/")
@@ -35,7 +36,7 @@ public class SugerenciaController {
 	
 	@PostMapping()
 	@Operation(summary="Crear una sugerencia")
-	public ResponseEntity<Sugerencia> createSugerencia(@RequestBody Sugerencia sugerencia){
+	public ResponseEntity<Sugerencia> createSugerencia(@Valid @RequestBody Sugerencia sugerencia){
 		try {
 			Sugerencia sugerenciaPersistida = sugerenciaDAO.persist(sugerencia);
 			return new ResponseEntity<>(sugerenciaPersistida, HttpStatus.CREATED);
@@ -46,7 +47,7 @@ public class SugerenciaController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar una sugerencia")
-	public ResponseEntity<Sugerencia> updateUsuario(@RequestBody Sugerencia sugerencia){
+	public ResponseEntity<Sugerencia> updateUsuario(@Valid @RequestBody Sugerencia sugerencia){
 		try {
 			sugerenciaDAO.update(sugerencia);
 			return new ResponseEntity<Sugerencia>(sugerencia, HttpStatus.OK);

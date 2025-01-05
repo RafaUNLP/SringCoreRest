@@ -20,6 +20,7 @@ import com.example.demo.persistencia.clases.entidades.Producto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/productos/")
@@ -30,7 +31,7 @@ public class ProductoController {
 
 	@PostMapping()
 	@Operation(summary="Crear un producto")
-	public ResponseEntity<Producto> createProducto(@RequestBody Producto producto){
+	public ResponseEntity<Producto> createProducto(@Valid @RequestBody Producto producto){
 		try {
 			Producto productoPersistido = productoDAO.persist(producto);
 			return new ResponseEntity<>(productoPersistido, HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class ProductoController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un producto")
-	public ResponseEntity<Producto> updateProducto(@RequestBody Producto producto){
+	public ResponseEntity<Producto> updateProducto(@Valid @RequestBody Producto producto){
 		try {
 			productoDAO.update(producto);
 			return new ResponseEntity<Producto>(producto, HttpStatus.OK);

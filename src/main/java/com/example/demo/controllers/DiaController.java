@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/dias/")
@@ -33,7 +34,7 @@ public class DiaController {
 
     @PostMapping
     @Operation(summary="Crear un nuevo Dia si no existe previamente")
-    public ResponseEntity<Dia> createDia(@RequestBody Dia dia) {
+    public ResponseEntity<Dia> createDia(@Valid @RequestBody Dia dia) {
         try {
             Dia creado = diaDAO.persist(dia);
             return new ResponseEntity<>(creado, HttpStatus.CREATED);
@@ -87,7 +88,7 @@ public class DiaController {
 
     @PutMapping("{id}")
     @Operation(summary="Actualizar un día")
-    public ResponseEntity<Dia> updateDia(@PathVariable long id, @RequestBody Dia dia) {
+    public ResponseEntity<Dia> updateDia(@PathVariable long id, @Valid @RequestBody Dia dia) {
         try {
         	Dia anterior = diaDAO.findById(id);
             if (anterior == null)
