@@ -120,11 +120,14 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("rol/{rol}")
+	@GetMapping("rol/{nombreRol}")
 	@Operation(summary="Recupear los usuarios que tienen un determinado rol")
-	public ResponseEntity<List<Usuario>> getByRol(@PathVariable Rol rol){
+	public ResponseEntity<List<Usuario>> getByRol(@PathVariable String nombreRol){
 		try {
-			List<Usuario> usuarios = usuarioDAO.findByRol(rol);
+			Rol encontrado = rolDAO.findByName(nombreRol);
+			if (encontrado == null)
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			List<Usuario> usuarios = usuarioDAO.findByRol(encontrado);
 			return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
 		}
 		catch(Exception e) {
