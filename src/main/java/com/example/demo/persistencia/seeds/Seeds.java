@@ -3,6 +3,7 @@ package com.example.demo.persistencia.seeds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.persistencia.clases.entidades.AdministradorRol;
 import com.example.demo.persistencia.clases.entidades.ClienteRol;
@@ -14,7 +15,6 @@ import com.example.demo.persistencia.clases.entidades.Usuario;
 import com.example.demo.persistencia.interfaces.DiaDAO;
 import com.example.demo.persistencia.interfaces.RolDAO;
 import com.example.demo.persistencia.interfaces.UsuarioDAO;
-import com.example.demo.services.PasswordEncoderService;
 
 @Configuration
 public class Seeds {
@@ -26,7 +26,7 @@ public class Seeds {
     @Autowired
     private RolDAO rolDAO;
     @Autowired
-    private PasswordEncoderService encoder;
+    private PasswordEncoder encoder;
 
     @Bean
     public Seeds generateData() {

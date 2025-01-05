@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Usuario;
-import com.example.demo.services.PasswordEncoderService;
 import com.example.demo.services.TokenService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +29,7 @@ public class AuthController {
 	@Autowired
 	private UsuarioDAOHibernateJPA usuarioDAO;
 	@Autowired
-	private PasswordEncoderService encoder;
+	private PasswordEncoder encoder;
 	
 	@PostMapping("login")
 	@Operation(summary="Login de un usuario")
@@ -43,7 +42,7 @@ public class AuthController {
 				respuesta = new LoginResponse("No se encotró el usuario", null);
 				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.NOT_FOUND);
 			}
-			if(!encoder.match(ingresada,usuario.getPassword())) {
+			if(!encoder.matches(ingresada,usuario.getPassword())) {
 				respuesta = new LoginResponse("Credenciales inválidas", null);
 				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.UNAUTHORIZED);
 			}
