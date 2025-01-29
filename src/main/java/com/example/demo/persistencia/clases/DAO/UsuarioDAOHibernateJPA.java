@@ -28,7 +28,7 @@ public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> impl
         } catch (NoResultException e) {
             return null;
         } catch (NonUniqueResultException e) {
-            throw new IllegalStateException("Más de un usuario encontrado con el DNI: " + dni);
+            throw new IllegalStateException("Más de un Usuario encontrado con el DNI: " + dni);
         }
     }
 
@@ -54,7 +54,7 @@ public class UsuarioDAOHibernateJPA extends GenericDAOHibernateJPA<Usuario> impl
         } catch (NoResultException e) {
             return null;
         } catch (NonUniqueResultException e) {
-            throw new IllegalStateException("Más de un usuario encontrado con el email: " + email);
+            throw new IllegalStateException("Más de un Usuario encontrado con el email: " + email);
         }
     }
 

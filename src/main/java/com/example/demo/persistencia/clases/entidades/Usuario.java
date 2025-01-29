@@ -11,7 +11,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "dni"))
+@Table(uniqueConstraints={
+	    @UniqueConstraint(name = "dni_unico" ,columnNames="dni"),
+	    @UniqueConstraint(name = "email_unico" ,columnNames="email")
+	})
 public class Usuario extends EntidadBase{
 	
 	@NotNull @Size(min=8,max=8,message="El dni debe contar con 8 caracteres numéricos")
@@ -31,7 +34,6 @@ public class Usuario extends EntidadBase{
 	private String apellido;
 	
     @Email(message = "Correo electrónico inválido")
-    @Column(nullable = false, unique = true)
 	private String email;
     
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -16,9 +16,6 @@ import com.example.demo.services.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -40,10 +37,10 @@ public class AuthController {
 		try {
 			LoginResponse respuesta;
 			String ingresada = pedido.getPassword();
-//			if(ingresada == null) {
-//				respuesta = new LoginResponse("No se recibió una contraseña", null);
-//				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.CONFLICT);
-//			}
+			if(ingresada == null) {
+				respuesta = new LoginResponse("No se recibió una contraseña", null);
+				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.CONFLICT);
+			}
 			Usuario usuario = usuarioDAO.findByEmail(pedido.getEmail());
 			if(usuario == null) {
 				respuesta = new LoginResponse("No se encotró el usuario", null);

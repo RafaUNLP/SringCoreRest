@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ import com.example.demo.persistencia.clases.entidades.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -42,11 +44,6 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario usuario){
 		try {
 			Usuario usuarioEmail = usuarioDAO.findByEmail(usuario.getEmail());
-			if(usuarioEmail != null)
-				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-			Usuario usuarioDni = usuarioDAO.findByDni(usuario.getDni());
-			if(usuarioDni != null)
-				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 			Rol rol = rolDAO.findByName(usuario.getRol().getNombre());
 			usuario.setRol(rol);
 			usuario.setPassword(encoder.encode(usuario.getPassword()));

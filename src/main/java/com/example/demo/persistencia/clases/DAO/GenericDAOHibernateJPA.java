@@ -42,7 +42,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
                            .getSingleResult();
             return count != null;
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al verificar la existencia de la entidad", e);
+            throw new PersistenceException("Error al verificar la existencia de la entidad" + this.entityClass.getSimpleName(), e);
         }
     }
 
@@ -51,7 +51,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
         try {
             return em.find(entityClass, id);
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al buscar la entidad por ID", e);
+            throw new PersistenceException("Error al buscar la entidad" + this.entityClass.getSimpleName() + "por ID", e);
         }
     }
 
@@ -60,7 +60,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
         try {
             return em.createQuery("FROM " + entityClass.getName(), entityClass).getResultList();
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al obtener todas las entidades", e);
+            throw new PersistenceException("Error al obtener todos las entidades de " + this.entityClass.getSimpleName(), e);
         }
     }
 
@@ -69,7 +69,7 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
         try {
             return em.merge(entity);
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al actualizar la entidad", e);
+            throw new PersistenceException("Error al actualizar la entidad" + this.entityClass.getSimpleName(), e);
         }
     }
 
@@ -79,22 +79,21 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
             em.remove(em.merge(entity));
             em.flush();
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al eliminar la entidad", e);
+            throw new PersistenceException("Error al eliminar la entidad" + this.entityClass.getSimpleName(), e);
         }
     }
 
     @Override
     public boolean delete(long id) {
         try {
-            T entity = em.find(entityClass, id);  // Buscamos la entidad por ID
+            T entity = em.find(entityClass, id);
             if (entity != null) {
-                em.remove(entity);  // Eliminamos la entidad si se encuentra
-                em.flush();
+                em.remove(entity);
                 return true;
             }
             return false;
         } catch (RuntimeException e) {
-            throw new PersistenceException("Error al eliminar la entidad por ID", e);
+            throw new PersistenceException("Error al eliminar la entidad" + this.entityClass.getSimpleName() + " por ID", e);
         }
     }
 }
