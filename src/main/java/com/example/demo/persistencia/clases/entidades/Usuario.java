@@ -25,7 +25,8 @@ public class Usuario extends EntidadBase{
 	private String password;
 	
 	@NotNull
-	private String pathImagen;
+	@Column(columnDefinition="text")
+	private String imagen;
 	
 	@NotNull @Size(max=30,message="El nombre no debe superar los 30 caracteres")
 	private String nombre;
@@ -61,7 +62,7 @@ public class Usuario extends EntidadBase{
 		this(); //constructor por defecto
 		this.dni = dni;
 		this.password = password;
-		this.pathImagen = pathImagen;
+		this.imagen = pathImagen;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
@@ -140,11 +141,11 @@ public class Usuario extends EntidadBase{
 	}
 
 	public String getImagen() {
-		return pathImagen;
+		return imagen;
 	}
 
 	public void setImagen(String pathImagen) {
-		this.pathImagen = pathImagen;
+		this.imagen = pathImagen;
 	}
 
 	public String getNombre() {

@@ -47,8 +47,8 @@ public abstract class Menu extends Item{
 	private String bebida;
 	
 	@Lob
-	@Column(name = "base64", columnDefinition = "text")
-	private byte[] base64;
+	@Column(columnDefinition = "text")
+	private String imagen;
 	
 /* PARA EL PGADMIN4:
 
@@ -120,12 +120,12 @@ SET DATA TYPE text;
 		this.bebida = bebida;
 	}
 	
-	public byte[] getBase64() {
-		return base64;
+	public String getImagen() {
+		return imagen;
 	}
 
-	public void setBase64(byte[] imagenBase64) {
-		this.base64 = imagenBase64;
+	public void setImagen(String imagenBase64) {
+		this.imagen = imagenBase64;
 	}
 
 }

@@ -68,12 +68,12 @@ public class Seeds {
         if (usuario1 == null) {
             usuario1 = new Usuario();
             usuario1.setApellido("Levis");
-            usuario1.setNombre("Marcos");
+            usuario1.setNombre("Responsable");
             usuario1.setDni("41106252");
             usuario1.setEmail("marcos@gmail.com");
             usuario1.setPassword(encoder.encode("password"));
             usuario1.setImagen("/img");
-            usuario1.setRol(rolAdmin);
+            usuario1.setRol(rolResponsableDeTurno);
             usuarioDAO.persist(usuario1);
         } else {
             usuarioDAO.update(usuario1);
@@ -82,7 +82,7 @@ public class Seeds {
         if (usuario2 == null) {
             usuario2 = new Usuario();
             usuario2.setApellido("Gomez");
-            usuario2.setNombre("Rafael");
+            usuario2.setNombre("Admin");
             usuario2.setDni("41109313");
             usuario2.setEmail("rafael@gmail.com");
             usuario2.setPassword(encoder.encode("password"));
@@ -96,7 +96,7 @@ public class Seeds {
         if (usuario3 == null) {
             usuario3 = new Usuario();
             usuario3.setApellido("Gutierrez");
-            usuario3.setNombre("Diego");
+            usuario3.setNombre("Cliente");
             usuario3.setDni("41107713");
             usuario3.setEmail("diego@gmail.com");
             usuario3.setPassword(encoder.encode("password"));
@@ -118,8 +118,6 @@ public class Seeds {
             if (dia == null) {
                 dia = new Dia(enumDia);
                 diaDAO.persist(dia);
-            } else {
-                diaDAO.update(dia);
             }
         }
 
