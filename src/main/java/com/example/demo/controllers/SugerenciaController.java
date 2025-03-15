@@ -42,17 +42,20 @@ public class SugerenciaController {
 	
 	@PostMapping()
 	@Operation(summary="Crear una sugerencia")
-	public ResponseEntity<Sugerencia> createSugerencia(@Valid @RequestBody SugerenciaDTO sugerenciaDTO){
+	public ResponseEntity<SugerenciaDTO> createSugerencia(@Valid @RequestBody SugerenciaDTO sugerenciaDTO){
 		try {
 			Usuario autor = usuarioDAO.findById(sugerenciaDTO.getUsuarioId());
 			if(autor == null) {
 				throw new EntityNotFoundException();
 			}
-			Sugerencia sugerencia = new Sugerencia(sugerenciaDTO.getTexto(),sugerenciaDTO.getFecha(),autor);
+			Sugerencia sugerencia = new Sugerencia(sugerenciaDTO.getTexto(),sugerenciaDTO.getFecha(),sugerenciaDTO.getCategoria(),autor);
 			if(autor.addSugerencia(sugerencia)){
 				sugerencia = sugerenciaDAO.persist(sugerencia);
-				usuarioDAO.update(autor);
-				return new ResponseEntity<>(sugerencia, HttpStatus.CREATED);
+				autor = usuarioDAO.update(autor);
+				sugerenciaDTO.setUsuarioId(autor.getId());
+				sugerenciaDTO.setId(sugerencia.getId());
+				sugerenciaDTO.setNombreAutor(autor.getNombre() + " " + autor.getApellido());
+				return new ResponseEntity<>(sugerenciaDTO, HttpStatus.CREATED);
 			}
 			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 		}catch(PersistenceException e) {
@@ -62,10 +65,16 @@ public class SugerenciaController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar una sugerencia")
-	public ResponseEntity<Sugerencia> updateUsuario(@Valid @RequestBody Sugerencia sugerencia){
+	public ResponseEntity<SugerenciaDTO> updateUsuario(@Valid @RequestBody SugerenciaDTO sugerencia){
 		try {
-			sugerenciaDAO.update(sugerencia);
-			return new ResponseEntity<Sugerencia>(sugerencia, HttpStatus.OK);
+			Sugerencia original = sugerenciaDAO.findById(sugerencia.getId());
+			if(original == null)
+				throw new EntityNotFoundException("No se encontró la sugerencia a modificar");
+			original.setCategoria(sugerencia.getCategoria());
+			original.setTexto(sugerencia.getTexto());
+			original.setFecha(sugerencia.getFecha());
+			sugerenciaDAO.update(original);
+			return new ResponseEntity<SugerenciaDTO>(sugerencia, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
@@ -99,24 +108,25 @@ public class SugerenciaController {
 	
 	@GetMapping()
 	@Operation(summary="Recuperar todas las sugerencias")
-	public ResponseEntity<List<Sugerencia>> getSugerencia(){
+	public ResponseEntity<List<SugerenciaDTO>> getSugerencia(){
 		try {
 			List<Sugerencia> sugerencias = sugerenciaDAO.findAll();
-			return new ResponseEntity<List<Sugerencia>>(sugerencias, HttpStatus.OK);
+			List<SugerenciaDTO> dtos = sugerencias.stream().map(s -> new SugerenciaDTO(s)).toList();
+			return new ResponseEntity<List<SugerenciaDTO>>(dtos, HttpStatus.OK);
 		}
 		catch(Exception e){
-			return new ResponseEntity<List<Sugerencia>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<SugerenciaDTO>>(HttpStatus.NO_CONTENT);
 		}
 	}	
 	
 	@GetMapping("{id}")
 	@Operation(summary="Recuperar una sugerencia por su Id")
-	public ResponseEntity<Sugerencia> getSugerenciaById(@PathVariable long id){
+	public ResponseEntity<SugerenciaDTO> getSugerenciaById(@PathVariable long id){
 		try {
 			Sugerencia sugerencia = sugerenciaDAO.findById(id);
 			if(sugerencia == null)
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return new ResponseEntity<Sugerencia>(sugerencia, HttpStatus.OK);
+			return new ResponseEntity<SugerenciaDTO>(new SugerenciaDTO(sugerencia), HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
@@ -125,21 +135,22 @@ public class SugerenciaController {
 	
 	@GetMapping("/de-una-fecha/{date}/{max}")
 	@Operation(summary="Recuperar todas las sugerencias de una fecha")
-	public ResponseEntity<List<Sugerencia>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable  int max){
+	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable  int max){
 		try {
 			if(max < 1)
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			List<Sugerencia> sugerencias = sugerenciaDAO.findByDate(date, max);
-			return new ResponseEntity<List<Sugerencia>>(sugerencias, HttpStatus.OK);
+			List<SugerenciaDTO> dtos = sugerencias.stream().map(s -> new SugerenciaDTO(s)).toList();
+			return new ResponseEntity<List<SugerenciaDTO>>(dtos, HttpStatus.OK);
 		}
 		catch(Exception e){
-			return new ResponseEntity<List<Sugerencia>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<SugerenciaDTO>>(HttpStatus.NO_CONTENT);
 		}
 	}
 	
 	@GetMapping("ordenadas-por-fecha/{orden}")
 	@Operation(summary="Recuperar todas las sugerencias ordenadas por fecha ('ascendente' o 'descendente')")
-	public ResponseEntity<List<Sugerencia>> getSugerenciasOrdereredByDate(@PathVariable String orden){
+	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasOrdereredByDate(@PathVariable String orden){
 	    try {
 	        List<Sugerencia> sugerencias;
 
@@ -150,8 +161,8 @@ public class SugerenciaController {
 	        } else {
 	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	        }
-
-	        return new ResponseEntity<>(sugerencias, HttpStatus.OK);
+	        List<SugerenciaDTO> dtos = sugerencias.stream().map(s -> new SugerenciaDTO(s)).toList();
+	        return new ResponseEntity<List<SugerenciaDTO>>(dtos, HttpStatus.OK);
 	    } catch (Exception e) {
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }

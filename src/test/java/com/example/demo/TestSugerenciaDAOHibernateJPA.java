@@ -14,6 +14,7 @@ import com.example.demo.persistencia.clases.DAO.SugerenciaDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Sugerencia;
 import com.example.demo.persistencia.clases.entidades.Usuario;
+import com.example.demo.persistencia.clases.entidades.Sugerencia.CategoriaSugerencia;
 
 import jakarta.transaction.Transactional;
 
@@ -36,9 +37,9 @@ public class TestSugerenciaDAOHibernateJPA {
         // Crear y persistir sugerencias de ejemplo solo si no existen
         usuario = usuarioDAO.findAll().getFirst();
         if (sugerenciaDAO.findByDate(LocalDate.of(2024, 10, 23)).isEmpty()) {
-            Sugerencia sugerencia1 = new Sugerencia("Texto de ejemplo 1", LocalDate.of(2024, 10, 23),usuario);
-            Sugerencia sugerencia2 = new Sugerencia("Texto de ejemplo 2", LocalDate.of(2024, 10, 22),usuario);
-            Sugerencia sugerencia3 = new Sugerencia("Texto de ejemplo 3", LocalDate.of(2024, 10, 22),usuario);
+            Sugerencia sugerencia1 = new Sugerencia("Texto de ejemplo 1", LocalDate.of(2024, 10, 23),CategoriaSugerencia.Alimentos,usuario);
+            Sugerencia sugerencia2 = new Sugerencia("Texto de ejemplo 2", LocalDate.of(2024, 10, 22),CategoriaSugerencia.Alimentos,usuario);
+            Sugerencia sugerencia3 = new Sugerencia("Texto de ejemplo 3", LocalDate.of(2024, 10, 22),CategoriaSugerencia.Alimentos,usuario);
             sugerenciaDAO.persist(sugerencia1);
             sugerenciaDAO.persist(sugerencia2);
             sugerenciaDAO.persist(sugerencia3);
@@ -79,7 +80,7 @@ public class TestSugerenciaDAOHibernateJPA {
 
     @Test
     public void testPersist() {
-        Sugerencia nuevaSugerencia = new Sugerencia("Texto de ejemplo 4", LocalDate.of(2024, 10, 24),usuario);
+        Sugerencia nuevaSugerencia = new Sugerencia("Texto de ejemplo 4", LocalDate.of(2024, 10, 24),CategoriaSugerencia.Alimentos,usuario);
         sugerenciaDAO.persist(nuevaSugerencia);
 
         List<Sugerencia> sugerencias = sugerenciaDAO.findByDate(LocalDate.of(2024, 10, 24));
