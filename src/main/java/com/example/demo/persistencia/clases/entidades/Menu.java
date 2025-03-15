@@ -1,11 +1,14 @@
 package com.example.demo.persistencia.clases.entidades;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -42,6 +45,18 @@ public abstract class Menu extends Item{
 	
 	@NotNull @Size(max=50,message="La bebida no debe superar los 50 caracteres")
 	private String bebida;
+	
+	@Lob
+	@Column(columnDefinition = "text")
+	private String imagen;
+	
+/* PARA EL PGADMIN4:
+
+ALTER TABLE IF EXISTS Menu
+ALTER COLUMN base64 
+SET DATA TYPE text;
+
+*/
 
 	public Menu() {}
 	
@@ -103,6 +118,14 @@ public abstract class Menu extends Item{
 
 	public void setBebida(String bebida) {
 		this.bebida = bebida;
+	}
+	
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagenBase64) {
+		this.imagen = imagenBase64;
 	}
 
 }

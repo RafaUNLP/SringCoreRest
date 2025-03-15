@@ -24,7 +24,7 @@ public class RolDAOHibernateJPA extends GenericDAOHibernateJPA<Rol> implements R
         } catch (NoResultException e) {
             return null;
         } catch (NonUniqueResultException e) {
-            throw new IllegalStateException("Más de un rol encontrado con el nombre: " + nombre);
+            throw new IllegalStateException("Más de un Rol encontrado con el nombre: " + nombre);
         }
     }
 }

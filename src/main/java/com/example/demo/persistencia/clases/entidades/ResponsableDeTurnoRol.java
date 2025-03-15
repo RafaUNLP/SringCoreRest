@@ -4,7 +4,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("responsable_de_turno")
+@DiscriminatorValue("responsable-turno")
 public class ResponsableDeTurnoRol extends Rol {
 
 	@Override
@@ -18,7 +18,7 @@ public class ResponsableDeTurnoRol extends Rol {
 	}
 
 	@Override
-	public boolean puedeTernerTurnos() {
+	public boolean puedeTenerTurnos() {
 		return true;
 	}
 

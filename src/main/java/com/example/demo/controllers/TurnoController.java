@@ -20,6 +20,7 @@ import com.example.demo.persistencia.clases.entidades.Turno;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -31,7 +32,7 @@ public class TurnoController {
 	
 	@PostMapping()
 	@Operation(summary="Crear un turno")
-	public ResponseEntity<Turno> createUsuario(@RequestBody Turno turno){
+	public ResponseEntity<Turno> createUsuario(@Valid @RequestBody Turno turno){
 		try {
 			Turno turnoPersistido = turnoDAO.persist(turno);
 			return new ResponseEntity<Turno>(turnoPersistido, HttpStatus.CREATED);
@@ -42,7 +43,7 @@ public class TurnoController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un turno")
-	public ResponseEntity<Turno> updateTurno(@RequestBody Turno turno){
+	public ResponseEntity<Turno> updateTurno(@Valid @RequestBody Turno turno){
 		try {
 			turnoDAO.update(turno);
 			return new ResponseEntity<Turno>(turno, HttpStatus.OK);

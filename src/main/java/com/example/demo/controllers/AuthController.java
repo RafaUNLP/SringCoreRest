@@ -4,6 +4,7 @@ package com.example.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,21 +26,27 @@ public class AuthController {
 	
 	@Autowired
 	private TokenService tokenService;
-	
 	@Autowired
 	private UsuarioDAOHibernateJPA usuarioDAO;
+	@Autowired
+	private PasswordEncoder encoder;
 	
 	@PostMapping("login")
 	@Operation(summary="Login de un usuario")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest pedido){
 		try {
 			LoginResponse respuesta;
+			String ingresada = pedido.getPassword();
+			if(ingresada == null) {
+				respuesta = new LoginResponse("No se recibió una contraseña", null);
+				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.CONFLICT);
+			}
 			Usuario usuario = usuarioDAO.findByEmail(pedido.getEmail());
 			if(usuario == null) {
 				respuesta = new LoginResponse("No se encotró el usuario", null);
 				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.NOT_FOUND);
 			}
-			if(!usuario.getPassword().equals(pedido.getPassword())) { //tenemos que agregar el hasheo o spring security
+			if(!encoder.matches(ingresada,usuario.getPassword())) {
 				respuesta = new LoginResponse("Credenciales inválidas", null);
 				return new ResponseEntity<LoginResponse>(respuesta, HttpStatus.UNAUTHORIZED);
 			}

@@ -3,8 +3,10 @@ package com.example.demo.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +15,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DTO.UsuarioDTO;
 import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios/")
@@ -28,17 +35,19 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioDAOHibernateJPA usuarioDAO;
+	@Autowired
+	private RolDAOHibernateJPA rolDAO;
+	@Autowired
+	private PasswordEncoder encoder;
 	
 	@PostMapping()
 	@Operation(summary="Crear un usuario")
-	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario usuario){
 		try {
 			Usuario usuarioEmail = usuarioDAO.findByEmail(usuario.getEmail());
-			if(usuarioEmail != null)
-				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-			Usuario usuarioDni = usuarioDAO.findByDni(usuario.getDni());
-			if(usuarioDni != null)
-				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			Rol rol = rolDAO.findByName(usuario.getRol().getNombre());
+			usuario.setRol(rol);
+			usuario.setPassword(encoder.encode(usuario.getPassword()));
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
@@ -48,10 +57,18 @@ public class UsuarioController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un usuario")
-	public ResponseEntity<Usuario> update(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> update(@Valid @RequestBody UsuarioDTO usuarioDTO){
 		try {
-			usuarioDAO.update(usuario);
-			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+			Usuario original = usuarioDAO.findById(usuarioDTO.getId());
+			if(original == null)
+				throw new Exception("Usuario no encontrado");
+			original.setDni(usuarioDTO.getDni());
+			original.setEmail(usuarioDTO.getEmail());
+	        original.setImagen(usuarioDTO.getImagen());
+	        original.setNombre(usuarioDTO.getNombre());
+	        original.setApellido(usuarioDTO.getApellido());
+			original = usuarioDAO.update(original);
+			return new ResponseEntity<Usuario>(original, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);	
@@ -109,11 +126,14 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("rol/{rol}")
+	@GetMapping("rol/{nombreRol}")
 	@Operation(summary="Recupear los usuarios que tienen un determinado rol")
-	public ResponseEntity<List<Usuario>> getByRol(@PathVariable Rol rol){
+	public ResponseEntity<List<Usuario>> getByRol(@PathVariable String nombreRol){
 		try {
-			List<Usuario> usuarios = usuarioDAO.findByRol(rol);
+			Rol encontrado = rolDAO.findByName(nombreRol);
+			if (encontrado == null)
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+			List<Usuario> usuarios = usuarioDAO.findByRol(encontrado);
 			return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
 		}
 		catch(Exception e) {

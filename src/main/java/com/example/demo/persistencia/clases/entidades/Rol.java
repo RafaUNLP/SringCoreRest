@@ -51,6 +51,6 @@ public abstract class Rol extends EntidadBase{
 	
 	public abstract boolean puedeComprar();
 	
-	public abstract boolean puedeTernerTurnos();
+	public abstract boolean puedeTenerTurnos();
 
 }

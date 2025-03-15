@@ -1,9 +1,14 @@
-TRUNCATE TABLE rol RESTART IDENTITY CASCADE;
+/*TRUNCATE TABLE rol RESTART IDENTITY CASCADE;
 TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
 TRUNCATE TABLE dia RESTART IDENTITY CASCADE;
 
 INSERT INTO rol(tipo_rol,id, nombre)
 VALUES ('administrador',1,'administrador');
+
+INSERT INTO rol(tipo_rol,id, nombre)
+VALUES ('cliente',2,'cliente');
+
+
 	
 INSERT INTO usuario(id,apellido,dni,email,nombre,password,pathimagen,rol_id)
 VALUES (1,'Levis', 41106252, 'marcos@gmail.com','Marcos','password','/img',1);
@@ -25,6 +30,6 @@ VALUES (4,'JUEVES');
 
 INSERT INTO dia(id,enumdia)
 VALUES (5,'VIERNES');
-
+*/
 
 

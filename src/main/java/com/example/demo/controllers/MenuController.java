@@ -1,11 +1,11 @@
 package com.example.demo.controllers;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +21,7 @@ import com.example.demo.persistencia.clases.entidades.Menu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -33,8 +34,11 @@ public class MenuController {
 	
 	@PostMapping()
 	@Operation(summary="Crear un menu")
-	public ResponseEntity<Menu> createMenu(@RequestBody Menu menu){
+	public ResponseEntity<Menu> createMenu(@Valid @RequestBody Menu menu){
 		try {
+//			String limpio = menu.getBase64().replaceAll("\n", "").replaceAll("\r", "");
+//            byte[] bytes = Base64.getDecoder().decode(limpio);
+//            menu.setBase64(bytes);
 			Menu menuPersistido = menuDAO.persist(menu);
 			return new ResponseEntity<>(menuPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
@@ -43,7 +47,7 @@ public class MenuController {
 	}
 	@PutMapping()
 	@Operation(summary="Actualizar un menu")
-	public ResponseEntity<Menu> updateMenu(@RequestBody Menu menu){
+	public ResponseEntity<Menu> updateMenu(@Valid @RequestBody Menu menu){
 		try {
 			menuDAO.update(menu);
 			return new ResponseEntity<Menu>(menu, HttpStatus.OK);

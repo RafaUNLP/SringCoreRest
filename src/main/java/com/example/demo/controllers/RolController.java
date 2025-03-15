@@ -20,6 +20,7 @@ import com.example.demo.persistencia.clases.entidades.Rol;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -31,7 +32,7 @@ public class RolController {
 	
 	@PostMapping()
 	@Operation(summary="Crear un rol")
-	public ResponseEntity<Rol> createUsuario(@RequestBody Rol rol){
+	public ResponseEntity<Rol> createUsuario(@Valid @RequestBody Rol rol){
 		try {
 			Rol rolPersistido = rolDAO.persist(rol);
 			return new ResponseEntity<Rol>(rolPersistido, HttpStatus.CREATED);

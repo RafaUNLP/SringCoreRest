@@ -18,15 +18,24 @@ public class Sugerencia extends EntidadBase{
 	@NotNull
 	private LocalDate fecha;
 	
+	@NotNull
+	private CategoriaSugerencia categoria;
+	
 	@ManyToOne
 	@JoinColumn(name="usuario_id",referencedColumnName="id")
 	private Usuario usuario;
+	
+    @NotNull
+	public enum CategoriaSugerencia{
+		Alimentos,Atencion,Precios,Infraestructura}
 
 	public Sugerencia() {} //Hibernate y POJOs
 	
-	public Sugerencia(String texto, LocalDate fecha) {
+	public Sugerencia(String texto, LocalDate fecha, CategoriaSugerencia categoria, Usuario usuario) {
 		this.texto = texto;
 		this.fecha = fecha;
+		this.usuario = usuario;
+		this.categoria = categoria;
 	}
 
 	public String getTexto() {
@@ -45,5 +54,22 @@ public class Sugerencia extends EntidadBase{
 		this.fecha = fecha;
 	}
 	
+	public CategoriaSugerencia getCategoria() {
+		return categoria;
+	}
+	
+	public void setCategoria(CategoriaSugerencia categoria) {
+		this.categoria = categoria;
+	}
+	
+	public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 	
 }
+
+
