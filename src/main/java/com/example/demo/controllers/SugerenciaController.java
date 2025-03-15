@@ -19,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.SugerenciaDAOHibernateJPA;
 import com.example.demo.persistencia.clases.entidades.Sugerencia;
+import com.example.demo.persistencia.clases.entidades.Usuario;
+import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DTO.SugerenciaDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.Valid;
 
@@ -33,13 +37,24 @@ public class SugerenciaController {
 	@Autowired
 	private SugerenciaDAOHibernateJPA sugerenciaDAO;
 	
+	@Autowired
+	private UsuarioDAOHibernateJPA usuarioDAO;
 	
 	@PostMapping()
 	@Operation(summary="Crear una sugerencia")
-	public ResponseEntity<Sugerencia> createSugerencia(@Valid @RequestBody Sugerencia sugerencia){
+	public ResponseEntity<Sugerencia> createSugerencia(@Valid @RequestBody SugerenciaDTO sugerenciaDTO){
 		try {
-			Sugerencia sugerenciaPersistida = sugerenciaDAO.persist(sugerencia);
-			return new ResponseEntity<>(sugerenciaPersistida, HttpStatus.CREATED);
+			Usuario autor = usuarioDAO.findById(sugerenciaDTO.getUsuarioId());
+			if(autor == null) {
+				throw new EntityNotFoundException();
+			}
+			Sugerencia sugerencia = new Sugerencia(sugerenciaDTO.getTexto(),sugerenciaDTO.getFecha(),autor);
+			if(autor.addSugerencia(sugerencia)){
+				sugerencia = sugerenciaDAO.persist(sugerencia);
+				usuarioDAO.update(autor);
+				return new ResponseEntity<>(sugerencia, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 		}catch(PersistenceException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		

@@ -24,9 +24,10 @@ public class Sugerencia extends EntidadBase{
 
 	public Sugerencia() {} //Hibernate y POJOs
 	
-	public Sugerencia(String texto, LocalDate fecha) {
+	public Sugerencia(String texto, LocalDate fecha, Usuario usuario) {
 		this.texto = texto;
 		this.fecha = fecha;
+		this.usuario = usuario;
 	}
 
 	public String getTexto() {

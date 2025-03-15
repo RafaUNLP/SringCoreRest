@@ -18,7 +18,7 @@ public class ResponsableDeTurnoRol extends Rol {
 	}
 
 	@Override
-	public boolean puedeTernerTurnos() {
+	public boolean puedeTenerTurnos() {
 		return true;
 	}
 

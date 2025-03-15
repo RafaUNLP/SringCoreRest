@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DTO.UsuarioDTO;
 import com.example.demo.persistencia.clases.entidades.Rol;
 import com.example.demo.persistencia.clases.entidades.Usuario;
 
@@ -56,10 +57,18 @@ public class UsuarioController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un usuario")
-	public ResponseEntity<Usuario> update(@Valid @RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> update(@Valid @RequestBody UsuarioDTO usuarioDTO){
 		try {
-			usuarioDAO.update(usuario);
-			return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+			Usuario original = usuarioDAO.findById(usuarioDTO.getId());
+			if(original == null)
+				throw new Exception("Usuario no encontrado");
+			original.setDni(usuarioDTO.getDni());
+			original.setEmail(usuarioDTO.getEmail());
+	        original.setImagen(usuarioDTO.getImagen());
+	        original.setNombre(usuarioDTO.getNombre());
+	        original.setApellido(usuarioDTO.getApellido());
+			original = usuarioDAO.update(original);
+			return new ResponseEntity<Usuario>(original, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);	

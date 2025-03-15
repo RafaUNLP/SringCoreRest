@@ -18,7 +18,7 @@ public class AdministradorRol extends Rol {
 	}
 
 	@Override
-	public boolean puedeTernerTurnos() {
+	public boolean puedeTenerTurnos() {
 		return false;
 	}
 
