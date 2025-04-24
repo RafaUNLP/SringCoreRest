@@ -138,7 +138,7 @@ public class SugerenciaController {
 	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable  int max){
 		try {
 			if(max < 1)
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				max = Integer.MAX_VALUE;
 			List<Sugerencia> sugerencias = sugerenciaDAO.findByDate(date, max);
 			List<SugerenciaDTO> dtos = sugerencias.stream().map(s -> new SugerenciaDTO(s)).toList();
 			return new ResponseEntity<List<SugerenciaDTO>>(dtos, HttpStatus.OK);

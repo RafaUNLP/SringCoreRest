@@ -28,20 +28,20 @@ public class SugerenciaDTO {
 		
 		public SugerenciaDTO() {}
 		
-		public SugerenciaDTO(String texto, LocalDate fecha, Usuario usuario) {
-			this.texto = texto;
-			this.fecha = fecha;
-			this.usuarioId = usuario.getId();
-			this.nombreAutor = usuario.getNombre() + " " +usuario.getApellido();
-		}
-
-		public SugerenciaDTO(Long id, String texto, LocalDate fecha, Usuario usuario) {
-			this.id = id;
-			this.texto = texto;
-			this.fecha = fecha;
-			this.usuarioId = usuario.getId();
-			this.nombreAutor = usuario.getNombre() + " " + usuario.getApellido();
-		}
+//		public SugerenciaDTO(String texto, LocalDate fecha, Usuario usuario) {
+//			this.texto = texto;
+//			this.fecha = fecha;
+//			this.usuarioId = usuario.getId();
+//			this.nombreAutor = usuario.getNombre() + " " +usuario.getApellido();
+//		}
+//
+//		public SugerenciaDTO(Long id, String texto, LocalDate fecha, Usuario usuario) {
+//			this.id = id;
+//			this.texto = texto;
+//			this.fecha = fecha;
+//			this.usuarioId = usuario.getId();
+//			this.nombreAutor = usuario.getNombre() + " " + usuario.getApellido();
+//		}
 		
 		public SugerenciaDTO(Sugerencia original) {
 			this.id = original.getId();
@@ -49,6 +49,7 @@ public class SugerenciaDTO {
 			this.fecha = original.getFecha();
 			this.usuarioId = original.getUsuario().getId();
 			this.nombreAutor = original.getUsuario().getNombre() + " " + original.getUsuario().getApellido();
+			this.categoria = original.getCategoria();
 		}
 		
 		public Long getId() {
