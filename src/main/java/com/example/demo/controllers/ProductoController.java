@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.ProductoDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DTO.ProductoDTO;
 import com.example.demo.persistencia.clases.entidades.Producto;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,10 +32,11 @@ public class ProductoController {
 
 	@PostMapping()
 	@Operation(summary="Crear un producto")
-	public ResponseEntity<Producto> createProducto(@Valid @RequestBody Producto producto){
+	public ResponseEntity<Producto> createProducto(@Valid @RequestBody ProductoDTO producto){
 		try {
-			Producto productoPersistido = productoDAO.persist(producto);
-			return new ResponseEntity<>(productoPersistido, HttpStatus.CREATED);
+			Producto nuevoProducto = new Producto(producto.getNombre(),producto.getPrecio());
+			productoDAO.persist(nuevoProducto);
+			return new ResponseEntity<Producto>(nuevoProducto, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
