@@ -20,6 +20,7 @@ import com.example.demo.persistencia.clases.entidades.Producto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.Valid;
 
@@ -46,6 +47,11 @@ public class ProductoController {
 	@Operation(summary="Actualizar un producto")
 	public ResponseEntity<Producto> updateProducto(@Valid @RequestBody Producto producto){
 		try {
+			Producto original = productoDAO.findById(producto.getId());
+			if(original == null)
+				throw new EntityNotFoundException("No se encontró el producto a modificar");
+			original.setNombre(producto.getNombre());
+			original.setPrecio(producto.getPrecio());
 			productoDAO.update(producto);
 			return new ResponseEntity<Producto>(producto, HttpStatus.OK);
 		}
