@@ -2,6 +2,8 @@ package com.example.demo.persistencia.clases.entidades;
 
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,9 +15,11 @@ public class Turno extends EntidadBase{
 	private String nombre;
 	
 	@NotNull
+	@JsonFormat(pattern = "HH:mm")
 	private LocalTime horaEntrada;
 	
 	@NotNull
+	@JsonFormat(pattern = "HH:mm")
 	private LocalTime horaSalida;
 
 	public Turno() {} //Hibernate y POJOs
