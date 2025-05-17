@@ -34,7 +34,7 @@ public class TurnoDTO {
 		public TurnoDTO(Turno turno) {
 			this.id = turno.getId();
 			this.nombre = turno.getNombre();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			this.horaEntrada = turno.getHoraEntrada().format(formatter);
 			this.horaSalida = turno.getHoraSalida().format(formatter);
 		}

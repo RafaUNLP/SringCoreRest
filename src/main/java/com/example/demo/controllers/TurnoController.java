@@ -37,7 +37,7 @@ public class TurnoController {
 	@Operation(summary="Crear un turno")
 	public ResponseEntity<TurnoDTO> createUsuario(@Valid @RequestBody TurnoDTO turno){
 		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			LocalTime horaInicio = LocalTime.parse(turno.getHoraEntrada(), formatter);
 			LocalTime horaFin = LocalTime.parse(turno.getHoraEntrada(), formatter);
 			Turno turnoPersistido = new Turno(turno.getNombre(),horaInicio,horaFin);
@@ -45,14 +45,14 @@ public class TurnoController {
 			return new ResponseEntity<TurnoDTO>(turno, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
+		}
 	}
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un turno")
 	public ResponseEntity<TurnoDTO> updateTurno(@Valid @RequestBody TurnoDTO turno){
 		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			LocalTime horaInicio = LocalTime.parse(turno.getHoraEntrada(), formatter);
 			LocalTime horaFin = LocalTime.parse(turno.getHoraEntrada(), formatter);
 			Turno turnoPersistido = new Turno(turno.getNombre(),horaInicio,horaFin);
