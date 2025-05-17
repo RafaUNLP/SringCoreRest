@@ -55,9 +55,9 @@ public class TurnoController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			LocalTime horaInicio = LocalTime.parse(turno.getHoraEntrada(), formatter);
 			LocalTime horaFin = LocalTime.parse(turno.getHoraEntrada(), formatter);
-			Turno turnoPersistido = new Turno(turno.getNombre(),horaInicio,horaFin);
-			turnoPersistido = turnoDAO.update(turnoPersistido);
-			turno.setId(turnoPersistido.getId());
+			Turno turnoActualizado = new Turno(turno.getNombre(),horaInicio,horaFin);
+			turnoActualizado.setId(turno.getId());
+			turnoActualizado = turnoDAO.update(turnoActualizado);
 			return new ResponseEntity<TurnoDTO>(turno, HttpStatus.OK);
 		}
 		catch(Exception e) {
