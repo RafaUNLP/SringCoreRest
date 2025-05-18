@@ -45,9 +45,13 @@ public class Usuario extends EntidadBase{
 	@JoinColumn(name = "usuario_id", referencedColumnName = "id")
 	private Set<Sugerencia> sugerencias;
 	
-	@OneToMany()
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private Set<Turno> turnos;
+	@ManyToMany
+	@JoinTable(
+	    name = "usuario_turno",
+	    joinColumns = @JoinColumn(name = "usuario_id"),
+	    inverseJoinColumns = @JoinColumn(name = "turno_id")
+	)
+	private Set<Turno> turnos = new HashSet<>();
 	
 	@OneToMany()
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")

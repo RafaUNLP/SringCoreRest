@@ -40,7 +40,7 @@ public class TurnoController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			LocalTime horaInicio = LocalTime.parse(turno.getHoraEntrada(), formatter);
 			LocalTime horaFin = LocalTime.parse(turno.getHoraEntrada(), formatter);
-			Turno turnoPersistido = new Turno(turno.getNombre(),horaInicio,horaFin);
+			Turno turnoPersistido = turnoDAO.persist(new Turno(turno.getNombre(),horaInicio,horaFin));
 			turno.setId(turnoPersistido.getId());
 			return new ResponseEntity<TurnoDTO>(turno, HttpStatus.CREATED);
 		}catch(PersistenceException e) {

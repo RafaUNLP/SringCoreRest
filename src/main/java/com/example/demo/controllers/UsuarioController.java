@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.RolDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DAO.TurnoDAOHibernateJPA;
 import com.example.demo.persistencia.clases.DAO.UsuarioDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DTO.TurnoDTO;
 import com.example.demo.persistencia.clases.DTO.UsuarioDTO;
 import com.example.demo.persistencia.clases.entidades.Rol;
+import com.example.demo.persistencia.clases.entidades.Turno;
 import com.example.demo.persistencia.clases.entidades.Usuario;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +40,8 @@ public class UsuarioController {
 	private UsuarioDAOHibernateJPA usuarioDAO;
 	@Autowired
 	private RolDAOHibernateJPA rolDAO;
+	@Autowired
+	private TurnoDAOHibernateJPA turnoDAO;
 	@Autowired
 	private PasswordEncoder encoder;
 	
@@ -68,6 +73,46 @@ public class UsuarioController {
 	        original.setNombre(usuarioDTO.getNombre());
 	        original.setApellido(usuarioDTO.getApellido());
 			original = usuarioDAO.update(original);
+			return new ResponseEntity<Usuario>(original, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);	
+		}
+	}
+	
+	@PutMapping("/asignar-turno/{usuarioId}/{turnoId}")
+	@Operation(summary="Asignar un turno a un usuario responsable de turnos")
+	public ResponseEntity<Usuario> asignTurno(@PathVariable long usuarioId, @PathVariable long turnoId){
+		try {
+			Usuario original = usuarioDAO.findById(usuarioId);
+			if(original == null)
+				throw new Exception("Usuario no encontrado");
+			boolean yaAsignado = original.getTurnos().stream().anyMatch(t -> t.getId() == turnoId);
+			if(!yaAsignado) {
+				Turno turnoOriginal = turnoDAO.findById(turnoId);
+				original.addTurno(turnoOriginal);
+				original = usuarioDAO.update(original);
+			}
+			return new ResponseEntity<Usuario>(original, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);	
+		}
+	}
+	
+	@PutMapping("/sacar-turno/{usuarioId}/{turnoId}")
+	@Operation(summary="Saca un turno a un usuario responsable de turnos")
+	public ResponseEntity<Usuario> removeTurno(@PathVariable long usuarioId, @PathVariable long turnoId){
+		try {
+			Usuario original = usuarioDAO.findById(usuarioId);
+			if(original == null)
+				throw new Exception("Usuario no encontrado");
+			boolean yaAsignado = original.getTurnos().stream().anyMatch(t -> t.getId() == turnoId);
+			if(yaAsignado) {
+				Turno turnoOriginal = turnoDAO.findById(turnoId);
+				original.removeTurno(turnoOriginal);
+				original = usuarioDAO.update(original);
+			}
 			return new ResponseEntity<Usuario>(original, HttpStatus.OK);
 		}
 		catch(Exception e) {
