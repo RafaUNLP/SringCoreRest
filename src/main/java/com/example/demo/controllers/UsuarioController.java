@@ -50,12 +50,21 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> create(@Valid @RequestBody Usuario usuario){
 		try {
 			Usuario usuarioEmail = usuarioDAO.findByEmail(usuario.getEmail());
+			
+			if(usuarioEmail != null)
+				throw new Exception("No es posible utilizar ese email en estos momentos. Por favor, elije otro");
+			
+			Usuario usuarioDNI = usuarioDAO.findByEmail(usuario.getEmail());
+			
+			if(usuarioDNI != null)
+				throw new Exception("No es posible utilizar ese DNI en estos momentos. Por favor, comunícate con nostros para poder solucionarlo");
+			
 			Rol rol = rolDAO.findByName(usuario.getRol().getNombre());
 			usuario.setRol(rol);
 			usuario.setPassword(encoder.encode(usuario.getPassword()));
 			Usuario usuarioPersistido = usuarioDAO.persist(usuario);
 			return new ResponseEntity<Usuario>(usuarioPersistido, HttpStatus.CREATED);
-		}catch(PersistenceException e) {
+		}catch(Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
@@ -67,6 +76,19 @@ public class UsuarioController {
 			Usuario original = usuarioDAO.findById(usuarioDTO.getId());
 			if(original == null)
 				throw new Exception("Usuario no encontrado");
+			
+			if(usuarioDTO.getEmail() != original.getEmail()) {//cambió el mail
+				Usuario otroUsuarioConEseMail = usuarioDAO.findByEmail(usuarioDTO.getEmail());
+				if(otroUsuarioConEseMail != null && otroUsuarioConEseMail.getId() != original.getId())
+					throw new ConstraintViolationException("No es posible utilizar ese email en estos momentos. Por favor, manten el anterior o elije otro",null);
+			}
+			
+			if(usuarioDTO.getDni() != original.getDni()) {//cambió el mail
+				Usuario otroUsuarioConEseDNI = usuarioDAO.findByDni(usuarioDTO.getDni());
+				if(otroUsuarioConEseDNI != null && otroUsuarioConEseDNI.getId() != original.getId())
+					throw new ConstraintViolationException("No es posible utilizar ese DNI en estos momentos. Por favor, manten el anterior o comunícate con nostros para resolverlo", null);
+			}
+			
 			original.setDni(usuarioDTO.getDni());
 			original.setEmail(usuarioDTO.getEmail());
 	        original.setImagen(usuarioDTO.getImagen());
@@ -76,7 +98,7 @@ public class UsuarioController {
 			return new ResponseEntity<Usuario>(original, HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<Usuario>(HttpStatus.NO_CONTENT);	
+			return new ResponseEntity<Usuario>(HttpStatus.CONFLICT);
 		}
 	}
 	
@@ -188,7 +210,7 @@ public class UsuarioController {
 	
 	
 	@GetMapping()
-	@Operation(summary="Recupear todos los usuarios")
+	@Operation(summary="Recuprear todos los usuarios")
 	public ResponseEntity<List<Usuario>> getAll(){		
 		try {
 			List<Usuario> usuarios = usuarioDAO.findAll();

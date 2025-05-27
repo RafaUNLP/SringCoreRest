@@ -14,6 +14,10 @@ public class ProductoDTO {
     @DecimalMax(value = "99999999.9", message = "El precio no debe ser mayor que 99.999.999,9")
 	private double precio;
 
+	public ProductoDTO() {
+		
+	}
+	
 	public ProductoDTO(String nombre, double precio) {
 		this.nombre = nombre;
 		this.precio = precio;

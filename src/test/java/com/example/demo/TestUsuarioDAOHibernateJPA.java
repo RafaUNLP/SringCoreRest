@@ -48,7 +48,7 @@ class TestUsuarioDAOHibernateJPA {
     void testPersistUsuario() {
         // Crear un usuario con rol administrador
         Rol admin = rolDAO.findByName("administrador");
-        Usuario usuario = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com");
+        Usuario usuario = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com", ".jpg");
         usuario.setRol(admin);
 
         usuarioDAO.persist(usuario);
@@ -65,7 +65,7 @@ class TestUsuarioDAOHibernateJPA {
     void testFindByDni() {
         // Crear y persistir un usuario
         Rol admin = rolDAO.findByName("administrador");
-        Usuario usuario = new Usuario("87654321", "password321", "imagen2.jpg", "Maria", "Lopez", "maria@example.com");
+        Usuario usuario = new Usuario("87654321", "password321", "imagen2.jpg", "Maria", "Lopez", "maria@example.com",".jpg");
         usuario.setRol(admin);
 
         usuarioDAO.persist(usuario);
@@ -90,9 +90,9 @@ class TestUsuarioDAOHibernateJPA {
         Rol admin = rolDAO.findByName("administrador");
         Rol cliente = rolDAO.findByName("cliente");
 
-        Usuario usuario1 = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com");
+        Usuario usuario1 = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com",".jpg");
         usuario1.setRol(admin);
-        Usuario usuario2 = new Usuario("87654321", "password321", "imagen2.jpg", "Maria", "Lopez", "maria@example.com");
+        Usuario usuario2 = new Usuario("87654321", "password321", "imagen2.jpg", "Maria", "Lopez", "maria@example.com",".jpg");
         usuario2.setRol(cliente);
 
         usuarioDAO.persist(usuario1);
@@ -114,9 +114,9 @@ class TestUsuarioDAOHibernateJPA {
         // Crear y persistir usuarios con el mismo rol
         Rol admin = rolDAO.findByName("administrador");
 
-        Usuario usuario1 = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com");
-        Usuario usuario2 = new Usuario("87654321", "password321", "imagen2.jpg", "Maria", "Lopez", "maria@example.com");
-        Usuario usuario3 = new Usuario("11223344", "password789", "imagen3.jpg", "Ana", "Diaz", "ana@example.com");
+        Usuario usuario1 = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com",".jpg");
+        Usuario usuario2 = new Usuario("87654321", "password321", "imagen2.jpg", "Maria", "Lopez", "maria@example.com",".jpg");
+        Usuario usuario3 = new Usuario("11223344", "password789", "imagen3.jpg", "Ana", "Diaz", "ana@example.com",".jpg");
 
         usuario1.setRol(admin);
         usuario2.setRol(admin);
@@ -138,7 +138,7 @@ class TestUsuarioDAOHibernateJPA {
     void testDeleteUsuario() {
         // Crear y persistir un usuario
         Rol admin = rolDAO.findByName("administrador");
-        Usuario usuario = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com");
+        Usuario usuario = new Usuario("12345678", "password123", "imagen.jpg", "Juan", "Perez", "juan@example.com",".jpg");
         usuario.setRol(admin);
 
         usuarioDAO.persist(usuario);

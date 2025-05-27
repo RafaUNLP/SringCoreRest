@@ -107,9 +107,6 @@ public class DiaController {
             else 
             	dia.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));             
             
-        
-        
-            
             Dia actualizado = diaDAO.update(dia);
             return new ResponseEntity<>(actualizado, HttpStatus.OK);
         } catch (PersistenceException e) {

@@ -28,6 +28,9 @@ public class Usuario extends EntidadBase{
 	@Column(columnDefinition="text")
 	private String imagen;
 	
+	@Column(columnDefinition="text")
+	private String tipoMime;
+	
 	@NotNull @Size(max=30,message="El nombre no debe superar los 30 caracteres")
 	private String nombre;
 	
@@ -63,7 +66,7 @@ public class Usuario extends EntidadBase{
 		this.compras = new HashSet<Compra>();
 	} //lo requiere Hibernate, que espera POJOs
 
-	public Usuario(String dni, String password, String pathImagen, String nombre, String apellido, String email) {
+	public Usuario(String dni, String password, String pathImagen, String nombre, String apellido, String email, String tipoMime) {
 		this(); //constructor por defecto
 		this.dni = dni;
 		this.password = password;
@@ -71,6 +74,7 @@ public class Usuario extends EntidadBase{
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
+		this.tipoMime = tipoMime;
 	}
 	
 	public Rol getRol () {
@@ -177,6 +181,13 @@ public class Usuario extends EntidadBase{
 	public void setEmail(String mail) {
 		this.email = mail;
 	}
-	
+
+	public String getTipoMime() {
+		return tipoMime;
+	}
+
+	public void setTipoMime(String tipoMime) {
+		this.tipoMime = tipoMime;
+	}
 	
 }
