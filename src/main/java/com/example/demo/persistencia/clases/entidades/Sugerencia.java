@@ -2,6 +2,8 @@ package com.example.demo.persistencia.clases.entidades;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 
@@ -21,6 +23,7 @@ public class Sugerencia extends EntidadBase{
 	@NotNull
 	private CategoriaSugerencia categoria;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="usuario_id",referencedColumnName="id")
 	private Usuario usuario;
