@@ -49,7 +49,7 @@ public class MenuController {
 	@Operation(summary="Actualizar un menu")
 	public ResponseEntity<Menu> updateMenu(@Valid @RequestBody Menu menu){
 		try {
-			menuDAO.update(menu);
+			menu = menuDAO.update(menu);
 			return new ResponseEntity<Menu>(menu, HttpStatus.OK);
 		}
 		catch(Exception e) {

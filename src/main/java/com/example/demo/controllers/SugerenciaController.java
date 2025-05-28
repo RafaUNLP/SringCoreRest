@@ -73,7 +73,7 @@ public class SugerenciaController {
 			original.setCategoria(sugerencia.getCategoria());
 			original.setTexto(sugerencia.getTexto());
 			original.setFecha(sugerencia.getFecha());
-			sugerenciaDAO.update(original);
+			original = sugerenciaDAO.update(original);
 			return new ResponseEntity<SugerenciaDTO>(sugerencia, HttpStatus.OK);
 		}
 		catch(Exception e) {

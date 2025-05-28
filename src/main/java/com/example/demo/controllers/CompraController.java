@@ -46,7 +46,7 @@ public class CompraController {
 	@Operation(summary="Actualizar una compra")
 	public ResponseEntity<Compra> updateCompra(@Valid @RequestBody Compra compra){
 		try {
-			compraDAO.update(compra);
+			compra = compraDAO.update(compra);
 			return new ResponseEntity<Compra>(compra, HttpStatus.OK);
 		}
 		catch(Exception e) {

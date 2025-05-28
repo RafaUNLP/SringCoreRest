@@ -36,26 +36,27 @@ public class ProductoController {
 	public ResponseEntity<Producto> createProducto(@Valid @RequestBody ProductoDTO producto){
 		try {
 			Producto nuevoProducto = new Producto(producto.getNombre(),producto.getPrecio());
-			productoDAO.persist(nuevoProducto);
+			nuevoProducto = productoDAO.persist(nuevoProducto);
 			return new ResponseEntity<Producto>(nuevoProducto, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
 	
-	@PutMapping()
+	@PutMapping("{id}")
 	@Operation(summary="Actualizar un producto")
-	public ResponseEntity<Producto> updateProducto(@Valid @RequestBody Producto producto){
+	public ResponseEntity<Producto> updateProducto(@PathVariable long id,@Valid @RequestBody Producto producto){
 		try {
-			Producto original = productoDAO.findById(producto.getId());
+			Producto original = productoDAO.findById(id);
 			if(original == null)
 				throw new EntityNotFoundException("No se encontró el producto a modificar");
 			original.setNombre(producto.getNombre());
 			original.setPrecio(producto.getPrecio());
-			productoDAO.update(producto);
-			return new ResponseEntity<Producto>(producto, HttpStatus.OK);
+			original = productoDAO.update(original);
+			return new ResponseEntity<Producto>(original, HttpStatus.OK);
 		}
 		catch(Exception e) {
+			System.out.println(e.getLocalizedMessage() + "EXCEPCIOOOON");
 			return new ResponseEntity<Producto>(HttpStatus.NO_CONTENT);	
 		}
 	}

@@ -50,7 +50,7 @@ public class TurnoController {
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un turno")
-	public ResponseEntity<TurnoDTO> updateTurno(@Valid @RequestBody TurnoDTO turno){
+	public ResponseEntity<Turno> updateTurno(@Valid @RequestBody TurnoDTO turno){
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 			LocalTime horaInicio = LocalTime.parse(turno.getHoraEntrada(), formatter);
@@ -58,10 +58,10 @@ public class TurnoController {
 			Turno turnoActualizado = new Turno(turno.getNombre(),horaInicio,horaFin);
 			turnoActualizado.setId(turno.getId());
 			turnoActualizado = turnoDAO.update(turnoActualizado);
-			return new ResponseEntity<TurnoDTO>(turno, HttpStatus.OK);
+			return new ResponseEntity<Turno>(turnoActualizado, HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<TurnoDTO>(HttpStatus.NO_CONTENT);	
+			return new ResponseEntity<Turno>(HttpStatus.NO_CONTENT);	
 		}
 	}
 	

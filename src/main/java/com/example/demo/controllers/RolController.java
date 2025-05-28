@@ -45,7 +45,7 @@ public class RolController {
 	@Operation(summary="Actualizar un rol")
 	public ResponseEntity<Rol> updateRol(@RequestBody Rol rol){
 		try {
-			rolDAO.update(rol);
+			rol = rolDAO.update(rol);
 			return new ResponseEntity<Rol>(rol, HttpStatus.OK);
 		}
 		catch(Exception e) {
