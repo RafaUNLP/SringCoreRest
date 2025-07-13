@@ -168,7 +168,7 @@ public class UsuarioController {
 	
 	
 	@GetMapping("{id}")
-	@Operation(summary="Recupear un usuario por su Id")
+	@Operation(summary="Recuperar un usuario por su Id")
 	public ResponseEntity<Usuario> getById(@PathVariable long id){
 		try {
 			Usuario usuario = usuarioDAO.findById(id);
@@ -182,7 +182,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("dni/{dni}")
-	@Operation(summary="Recupear un usuario por su DNI")
+	@Operation(summary="Recuperar un usuario por su DNI")
 	public ResponseEntity<Usuario> getByDni(@PathVariable String dni){
 		try {
 			Usuario usuario = usuarioDAO.findByDni(dni);
@@ -194,7 +194,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("rol/{nombreRol}")
-	@Operation(summary="Recupear los usuarios que tienen un determinado rol")
+	@Operation(summary="Recuperar los usuarios que tienen un determinado rol")
 	public ResponseEntity<List<Usuario>> getByRol(@PathVariable String nombreRol){
 		try {
 			Rol encontrado = rolDAO.findByName(nombreRol);
@@ -210,7 +210,7 @@ public class UsuarioController {
 	
 	
 	@GetMapping()
-	@Operation(summary="Recuprear todos los usuarios")
+	@Operation(summary="Recuperar todos los usuarios")
 	public ResponseEntity<List<Usuario>> getAll(){		
 		try {
 			List<Usuario> usuarios = usuarioDAO.findAll();
@@ -222,7 +222,7 @@ public class UsuarioController {
 	
 
 	@GetMapping("/ordenados-por-nombre")
-	@Operation(summary="Recupear todos los usuarios ordenados por nombre")
+	@Operation(summary="Recuperar todos los usuarios ordenados por nombre")
 	public ResponseEntity<List<Usuario>> getAllAcending(){
 		try {
 			List<Usuario> usuarios = usuarioDAO.findAllOrderedByNameAsc();

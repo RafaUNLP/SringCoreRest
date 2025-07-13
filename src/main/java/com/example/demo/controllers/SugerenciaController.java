@@ -135,7 +135,7 @@ public class SugerenciaController {
 	
 	@GetMapping("/de-una-fecha/{date}/{max}")
 	@Operation(summary="Recuperar todas las sugerencias de una fecha")
-	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable  int max){
+	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable int max){
 		try {
 			if(max < 1)
 				max = Integer.MAX_VALUE;

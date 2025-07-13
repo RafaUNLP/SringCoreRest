@@ -3,6 +3,7 @@ package com.example.demo.persistencia.clases.entidades;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -56,8 +57,7 @@ public class Usuario extends EntidadBase{
 	)
 	private Set<Turno> turnos = new HashSet<>();
 	
-	@OneToMany()
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+	@OneToMany(mappedBy = "usuario")
     private Set<Compra> compras;
 	
 	public Usuario() {
