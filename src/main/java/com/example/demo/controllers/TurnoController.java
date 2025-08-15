@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.persistencia.clases.DAO.TurnoDAOHibernateJPA;
+import com.example.demo.persistencia.clases.DTO.TurnoDTO;
 import com.example.demo.persistencia.clases.entidades.Turno;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,21 +35,30 @@ public class TurnoController {
 	
 	@PostMapping()
 	@Operation(summary="Crear un turno")
-	public ResponseEntity<Turno> createUsuario(@Valid @RequestBody Turno turno){
+	public ResponseEntity<TurnoDTO> createUsuario(@Valid @RequestBody TurnoDTO turno){
 		try {
-			Turno turnoPersistido = turnoDAO.persist(turno);
-			return new ResponseEntity<Turno>(turnoPersistido, HttpStatus.CREATED);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+			LocalTime horaInicio = LocalTime.parse(turno.getHoraEntrada(), formatter);
+			LocalTime horaFin = LocalTime.parse(turno.getHoraEntrada(), formatter);
+			Turno turnoPersistido = turnoDAO.persist(new Turno(turno.getNombre(),horaInicio,horaFin));
+			turno.setId(turnoPersistido.getId());
+			return new ResponseEntity<TurnoDTO>(turno, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}		
+		}
 	}
 	
 	@PutMapping()
 	@Operation(summary="Actualizar un turno")
-	public ResponseEntity<Turno> updateTurno(@Valid @RequestBody Turno turno){
+	public ResponseEntity<Turno> updateTurno(@Valid @RequestBody TurnoDTO turno){
 		try {
-			turnoDAO.update(turno);
-			return new ResponseEntity<Turno>(turno, HttpStatus.OK);
+			Turno original = turnoDAO.findById(turno.getId());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+			original.setHoraEntrada(LocalTime.parse(turno.getHoraEntrada(), formatter));
+			original.setHoraSalida(LocalTime.parse(turno.getHoraSalida(), formatter));
+			original.setNombre(turno.getNombre());
+			original = turnoDAO.update(original);
+			return new ResponseEntity<Turno>(original, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<Turno>(HttpStatus.NO_CONTENT);	
@@ -78,12 +90,12 @@ public class TurnoController {
 	
 	@GetMapping("{id}")
 	@Operation(summary="Recuperar un turno por su Id")
-	public ResponseEntity<Turno> getTurnoById(@PathVariable long id){
+	public ResponseEntity<TurnoDTO> getTurnoById(@PathVariable long id){
 		try {
 			Turno turno = turnoDAO.findById(id);
 			if(turno == null)
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return new ResponseEntity<Turno>(turno, HttpStatus.OK);
+			return new ResponseEntity<TurnoDTO>(new TurnoDTO(turno), HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
@@ -92,23 +104,23 @@ public class TurnoController {
 	
 	@GetMapping()
 	@Operation(summary="Recuperar todos los turnos")
-	public ResponseEntity<List<Turno>> getTurnos(){		
+	public ResponseEntity<List<TurnoDTO>> getTurnos(){		
 		try {
-			List<Turno> turnos = turnoDAO.findAll();
-			return new ResponseEntity<List<Turno>>(turnos, HttpStatus.OK);
+			List<TurnoDTO> turnos = turnoDAO.findAll().stream().map(t -> new TurnoDTO(t)).toList();
+			return new ResponseEntity<List<TurnoDTO>>(turnos, HttpStatus.OK);
 		}catch(Exception e) {
-			return new ResponseEntity<List<Turno>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<TurnoDTO>>(HttpStatus.NO_CONTENT);
 		}		
 	}
 	
 	@GetMapping("/ordenados-por-hora")
 	@Operation(summary="Recuperar todos los turnos ordenados por hora de inicio")
-	public ResponseEntity<List<Turno>> getTurnosOrderedByInitialHour(){		
+	public ResponseEntity<List<TurnoDTO>> getTurnosOrderedByInitialHour(){		
 		try {
-			List<Turno> turnos = turnoDAO.findAllOrderedByInitialHour();
-			return new ResponseEntity<List<Turno>>(turnos, HttpStatus.OK);
+			List<TurnoDTO> turnos = turnoDAO.findAllOrderedByInitialHour().stream().map(t -> new TurnoDTO(t)).toList();
+			return new ResponseEntity<List<TurnoDTO>>(turnos, HttpStatus.OK);
 		}catch(Exception e) {
-			return new ResponseEntity<List<Turno>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<TurnoDTO>>(HttpStatus.NO_CONTENT);
 		}		
 	}
 	

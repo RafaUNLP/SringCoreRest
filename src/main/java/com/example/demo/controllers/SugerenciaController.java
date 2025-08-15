@@ -73,7 +73,7 @@ public class SugerenciaController {
 			original.setCategoria(sugerencia.getCategoria());
 			original.setTexto(sugerencia.getTexto());
 			original.setFecha(sugerencia.getFecha());
-			sugerenciaDAO.update(original);
+			original = sugerenciaDAO.update(original);
 			return new ResponseEntity<SugerenciaDTO>(sugerencia, HttpStatus.OK);
 		}
 		catch(Exception e) {
@@ -135,10 +135,10 @@ public class SugerenciaController {
 	
 	@GetMapping("/de-una-fecha/{date}/{max}")
 	@Operation(summary="Recuperar todas las sugerencias de una fecha")
-	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable  int max){
+	public ResponseEntity<List<SugerenciaDTO>> getSugerenciasByDate(@PathVariable LocalDate date, @PathVariable int max){
 		try {
 			if(max < 1)
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				max = Integer.MAX_VALUE;
 			List<Sugerencia> sugerencias = sugerenciaDAO.findByDate(date, max);
 			List<SugerenciaDTO> dtos = sugerencias.stream().map(s -> new SugerenciaDTO(s)).toList();
 			return new ResponseEntity<List<SugerenciaDTO>>(dtos, HttpStatus.OK);

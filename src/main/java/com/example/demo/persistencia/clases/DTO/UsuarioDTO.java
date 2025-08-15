@@ -24,6 +24,9 @@ public class UsuarioDTO {
 	@NotNull
 	private String imagen;
 	
+	@NotNull
+	private String tipoMime;
+	
 	@NotNull @Size(max=30,message="El nombre no debe superar los 30 caracteres")
 	private String nombre;
 	
@@ -162,6 +165,12 @@ public class UsuarioDTO {
 		this.email = mail;
 	}
 	
-	
+	public String getTipoMime() {
+		return tipoMime;
+	}
+
+	public void setTipoMime(String tipoMime) {
+		this.tipoMime = tipoMime;
+	}
 }
 

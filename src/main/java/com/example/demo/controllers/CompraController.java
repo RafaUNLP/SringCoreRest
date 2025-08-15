@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class CompraController {
 	public ResponseEntity<Compra> createCompra(@Valid @RequestBody Compra compra){
 		try {
 			Compra compraPersistida = compraDAO.persist(compra);
-			return new ResponseEntity<>(compraPersistida, HttpStatus.CREATED);
+			return new ResponseEntity<Compra>(compraPersistida, HttpStatus.CREATED);
 		}catch(PersistenceException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
@@ -46,8 +47,11 @@ public class CompraController {
 	@Operation(summary="Actualizar una compra")
 	public ResponseEntity<Compra> updateCompra(@Valid @RequestBody Compra compra){
 		try {
-			compraDAO.update(compra);
-			return new ResponseEntity<Compra>(compra, HttpStatus.OK);
+			Compra buscada = compraDAO.findById(compra.getId());
+			if(buscada == null)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			buscada = compraDAO.update(compra);
+			return new ResponseEntity<Compra>(buscada, HttpStatus.OK);
 		}
 		catch(Exception e) {
 			return new ResponseEntity<Compra>(HttpStatus.NO_CONTENT);	
@@ -102,9 +106,9 @@ public class CompraController {
 			return new ResponseEntity<List<Compra>>(HttpStatus.NO_CONTENT);
 		}		
 	}
-	@GetMapping("between-dates")
+	@GetMapping("between-dates/{fechaInicio}/{fechaFin}")
 	@Operation(summary="Recuperar las compras entre dos fechas, puediendo optar por un máximo")
-	public ResponseEntity<List<Compra>> getCompras(@RequestBody int max, @RequestBody LocalDate fechaInicio, @RequestBody LocalDate fechaFin ){		
+	public ResponseEntity<List<Compra>> getCompras(@RequestBody int max, @PathVariable LocalDate fechaInicio, @PathVariable LocalDate fechaFin ){		
 		try {
 			if (max > 0) {				
 				List<Compra> compras = compraDAO.findBetweenDates(fechaInicio, fechaFin, max);

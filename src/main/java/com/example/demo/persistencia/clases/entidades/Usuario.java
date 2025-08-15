@@ -3,6 +3,7 @@ package com.example.demo.persistencia.clases.entidades;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -28,6 +29,9 @@ public class Usuario extends EntidadBase{
 	@Column(columnDefinition="text")
 	private String imagen;
 	
+	@Column(columnDefinition="text")
+	private String tipoMime;
+	
 	@NotNull @Size(max=30,message="El nombre no debe superar los 30 caracteres")
 	private String nombre;
 	
@@ -45,12 +49,15 @@ public class Usuario extends EntidadBase{
 	@JoinColumn(name = "usuario_id", referencedColumnName = "id")
 	private Set<Sugerencia> sugerencias;
 	
-	@OneToMany()
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private Set<Turno> turnos;
+	@ManyToMany
+	@JoinTable(
+	    name = "usuario_turno",
+	    joinColumns = @JoinColumn(name = "usuario_id"),
+	    inverseJoinColumns = @JoinColumn(name = "turno_id")
+	)
+	private Set<Turno> turnos = new HashSet<>();
 	
-	@OneToMany()
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+	@OneToMany(mappedBy = "usuario")
     private Set<Compra> compras;
 	
 	public Usuario() {
@@ -59,7 +66,7 @@ public class Usuario extends EntidadBase{
 		this.compras = new HashSet<Compra>();
 	} //lo requiere Hibernate, que espera POJOs
 
-	public Usuario(String dni, String password, String pathImagen, String nombre, String apellido, String email) {
+	public Usuario(String dni, String password, String pathImagen, String nombre, String apellido, String email, String tipoMime) {
 		this(); //constructor por defecto
 		this.dni = dni;
 		this.password = password;
@@ -67,6 +74,7 @@ public class Usuario extends EntidadBase{
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
+		this.tipoMime = tipoMime;
 	}
 	
 	public Rol getRol () {
@@ -173,6 +181,13 @@ public class Usuario extends EntidadBase{
 	public void setEmail(String mail) {
 		this.email = mail;
 	}
-	
+
+	public String getTipoMime() {
+		return tipoMime;
+	}
+
+	public void setTipoMime(String tipoMime) {
+		this.tipoMime = tipoMime;
+	}
 	
 }

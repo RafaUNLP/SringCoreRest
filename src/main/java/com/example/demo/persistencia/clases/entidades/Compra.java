@@ -4,14 +4,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
-@Entity
+@Entity //en la creacion cuando dentro hay un menu, no mandar el TIPOMENU sino TIPOITEM con el tipomenu concreto
 public class Compra extends EntidadBase{
 
 	@NotNull @DecimalMin(value = "0.0", message = "El precio debe ser al menos 0.0")
@@ -20,6 +23,11 @@ public class Compra extends EntidadBase{
 	
 	@NotNull
 	private LocalDate fecha;
+	
+	@ManyToOne
+	@JoinColumn(name = "usuario_id", referencedColumnName = "id")
+	@JsonIgnore
+	private Usuario usuario;
 	
 	@OneToMany
     @JoinColumn(name = "compra_id", referencedColumnName = "id")
@@ -51,7 +59,7 @@ public class Compra extends EntidadBase{
 		this.fecha = fecha;
 	}
 	
-	public List<Item> getItem(){
+	public List<Item> getItems(){
 		return this.items;
 	}
 	
