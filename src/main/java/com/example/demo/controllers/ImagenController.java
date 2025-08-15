@@ -3,18 +3,30 @@ package com.example.demo.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.demo.persistencia.clases.DTO.ImagenDTO;
+import com.example.demo.services.ImagenService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+
 import java.io.IOException;
 import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/imagenes/")
 @Tag(name="Conversor de imágenes PNG", description="Conversión de imágenes PNG")
-public class ImagenesController {
+public class ImagenController {
 
+	@Autowired
+	private ImagenService imagenService;
+	
     @PostMapping("codificarPNG")
     public ResponseEntity<String> convertImageToBase64(@RequestParam("file") MultipartFile file) {
         try {
@@ -50,6 +62,43 @@ public class ImagenesController {
             
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(("Error: Base64 inválido - " + e.getMessage()).getBytes());
+        }
+    }
+    
+    @PostMapping("guardarImagen")
+    @Operation(summary="Guardar una imagen")
+    public ResponseEntity<ImagenDTO> GuardarImagen(@RequestParam("imagen") MultipartFile imagen) {
+        try {
+            if (imagen == null)
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+            ImagenDTO imagenDTO = new ImagenDTO(imagenService.saveImagen(imagen));
+
+            return new ResponseEntity<ImagenDTO>(imagenDTO, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("recuperarImagen/{nombreImagen}")
+    @Operation(summary="Recuperar una imagen")
+    public ResponseEntity<Resource> RecuperarImagen(@PathVariable String nombreImagen) {
+        try {
+        	
+        	Resource imagen = imagenService.getImagen(nombreImagen);
+        	
+        	if (imagen == null)
+                return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+        	
+            String contentType = imagenService.getContentType(nombreImagen);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imagen.getFilename() + "\"")
+                    .body(imagen);
+            
+        } catch (IllegalArgumentException e) {
+        	return new ResponseEntity<Resource>( HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     

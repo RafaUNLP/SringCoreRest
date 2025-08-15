@@ -47,7 +47,10 @@ public abstract class Menu extends Item{
 	
 	@Lob
 	@Column(columnDefinition = "text")
-	private String imagen;
+	private String imagen = null;
+	
+	@NotNull @Size(max=100,message="La url de la imagen no debe superar los 100 caracteres")
+	private String imagenUrl;
 	
 /* PARA EL PGADMIN4:
 
@@ -127,4 +130,11 @@ SET DATA TYPE text;
 		this.imagen = imagenBase64;
 	}
 
+	public String getImagenUrl() {
+		return imagenUrl;
+	}
+
+	public void setImagenUrl(String url) {
+		this.imagenUrl = url;
+	}
 }

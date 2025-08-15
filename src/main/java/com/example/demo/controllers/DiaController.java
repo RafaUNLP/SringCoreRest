@@ -1,12 +1,5 @@
 package com.example.demo.controllers;
 
-import com.example.demo.persistencia.clases.entidades.Dia;
-import com.example.demo.persistencia.clases.entidades.EnumDia;
-import com.example.demo.persistencia.clases.entidades.MenuEstandar;
-import com.example.demo.persistencia.clases.entidades.MenuVegetariano;
-import com.example.demo.persistencia.interfaces.DiaDAO;
-import com.example.demo.persistencia.interfaces.MenuDAO;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -16,6 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.persistencia.clases.entidades.Dia;
+import com.example.demo.persistencia.clases.entidades.EnumDia;
+import com.example.demo.persistencia.clases.entidades.MenuEstandar;
+import com.example.demo.persistencia.clases.entidades.MenuVegetariano;
+import com.example.demo.persistencia.interfaces.DiaDAO;
+import com.example.demo.persistencia.interfaces.MenuDAO;
 
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
@@ -90,25 +90,27 @@ public class DiaController {
     @Operation(summary="Actualizar un día")
     public ResponseEntity<Dia> updateDia(@PathVariable long id, @Valid @RequestBody Dia dia) {
         try {
-        	Dia anterior = diaDAO.findById(id);
-            if (anterior == null)
+        	Dia persistido = diaDAO.findById(id);
+            if (persistido == null)
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             
             dia.setId(id);
             
-        ///Le saco el seteo del anterior para poder hacer un put de null a la hora de eliminar un menu de un dia en particular
-            if(dia.getMenuEstandar() == null)
-            	dia.setMenuEstandar(null);
-            else 
-            	dia.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
+            System.out.print(dia + " " + dia.getMenuEstandar() + " " + dia.getMenuVegetariano());
             
-            if(dia.getMenuVegetariano() == null)
-            	dia.setMenuVegetariano(null);
-            else 
-            	dia.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));             
+            if(dia.getMenuEstandar() != null)
+            	persistido.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
+            else
+            	persistido.setMenuEstandar(null);
             
-            Dia actualizado = diaDAO.update(dia);
-            return new ResponseEntity<>(actualizado, HttpStatus.OK);
+            if(dia.getMenuVegetariano() != null)
+            	persistido.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));      
+            else
+            	persistido.setMenuVegetariano(null);
+            
+            Dia actualizado = diaDAO.update(persistido);
+            
+            return new ResponseEntity<>(persistido, HttpStatus.OK);
         } catch (PersistenceException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
