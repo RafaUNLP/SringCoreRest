@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.services.TokenService;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
 //import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-//@WebFilter(filterName = "jwt-filter", urlPatterns = "*")
-//@Component
+@WebFilter(filterName = "jwt-filter", urlPatterns = "*")
+@Component
 public class TokenFilter implements Filter {
 
 	@Autowired

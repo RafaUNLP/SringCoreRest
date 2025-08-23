@@ -77,13 +77,13 @@ public class UsuarioController {
 			if(original == null)
 				throw new Exception("Usuario no encontrado");
 			
-			if(usuarioDTO.getEmail() != original.getEmail()) {//cambió el mail
+			if(usuarioDTO.getEmail() != original.getEmail()) {
 				Usuario otroUsuarioConEseMail = usuarioDAO.findByEmail(usuarioDTO.getEmail());
 				if(otroUsuarioConEseMail != null && otroUsuarioConEseMail.getId() != original.getId())
 					throw new ConstraintViolationException("No es posible utilizar ese email en estos momentos. Por favor, manten el anterior o elije otro",null);
 			}
 			
-			if(usuarioDTO.getDni() != original.getDni()) {//cambió el mail
+			if(usuarioDTO.getDni() != original.getDni()) {
 				Usuario otroUsuarioConEseDNI = usuarioDAO.findByDni(usuarioDTO.getDni());
 				if(otroUsuarioConEseDNI != null && otroUsuarioConEseDNI.getId() != original.getId())
 					throw new ConstraintViolationException("No es posible utilizar ese DNI en estos momentos. Por favor, manten el anterior o comunícate con nostros para resolverlo", null);

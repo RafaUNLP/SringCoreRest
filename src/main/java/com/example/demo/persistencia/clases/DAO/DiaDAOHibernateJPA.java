@@ -40,7 +40,7 @@ public class DiaDAOHibernateJPA extends GenericDAOHibernateJPA<Dia> implements D
             throw new NonUniqueResultException("Se encontró más de una instancia de Dia con el enum "
                     + enumerativo.toString() + ", lo cual no debe permitirse");
         } catch (Exception e) {
-            throw e;  // Se puede lanzar la excepción original
+            throw e;
         }
     }
     

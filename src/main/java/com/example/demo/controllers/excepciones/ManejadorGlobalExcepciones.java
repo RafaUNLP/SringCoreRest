@@ -59,7 +59,7 @@ public class ManejadorGlobalExcepciones {
         return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class) //no se captura porque el traductor de errores lo lleva a una DataIntegrityViolationException
+    @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> manejarErrorDeValidacion(ConstraintViolationException ex) {
         Map<String, String> errores = new HashMap<>();
         ex.getConstraintViolations().forEach(violation ->

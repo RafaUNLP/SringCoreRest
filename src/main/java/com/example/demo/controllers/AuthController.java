@@ -79,7 +79,7 @@ public class AuthController {
 		}
 	}
 	
-	// Hacerlas estáticas para permitir la deserialización
+	//estáticas para permitir la deserialización
 	private static class LoginRequest {
 		private String email;
 		private String password;

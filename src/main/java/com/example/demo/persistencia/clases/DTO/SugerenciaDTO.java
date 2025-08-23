@@ -28,21 +28,6 @@ public class SugerenciaDTO {
 		
 		public SugerenciaDTO() {}
 		
-//		public SugerenciaDTO(String texto, LocalDate fecha, Usuario usuario) {
-//			this.texto = texto;
-//			this.fecha = fecha;
-//			this.usuarioId = usuario.getId();
-//			this.nombreAutor = usuario.getNombre() + " " +usuario.getApellido();
-//		}
-//
-//		public SugerenciaDTO(Long id, String texto, LocalDate fecha, Usuario usuario) {
-//			this.id = id;
-//			this.texto = texto;
-//			this.fecha = fecha;
-//			this.usuarioId = usuario.getId();
-//			this.nombreAutor = usuario.getNombre() + " " + usuario.getApellido();
-//		}
-		
 		public SugerenciaDTO(Sugerencia original) {
 			this.id = original.getId();
 			this.texto = original.getTexto();

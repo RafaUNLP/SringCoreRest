@@ -18,7 +18,6 @@ public class ProductoDAOHibernateJPA extends GenericDAOHibernateJPA<Producto> im
 
     @Override
     public List<Producto> findAllOrderedByName() {
-        // Crear la consulta para obtener todos los productos ordenados por nombre
         TypedQuery<Producto> query = em.createQuery("SELECT p FROM Producto p ORDER BY p.nombre", this.entityClass);
         return query.getResultList();
     }

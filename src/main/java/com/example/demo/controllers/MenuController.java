@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ public class MenuController {
 	@Operation(summary="Crear un menu")
 	public ResponseEntity<Menu> createMenu(@Valid @RequestBody Menu menu){
 		try {
-//			String limpio = menu.getBase64().replaceAll("\n", "").replaceAll("\r", "");
-//            byte[] bytes = Base64.getDecoder().decode(limpio);
-//            menu.setBase64(bytes);
 			Menu menuPersistido = menuDAO.persist(menu);
 			return new ResponseEntity<>(menuPersistido, HttpStatus.CREATED);
 		}catch(PersistenceException e) {

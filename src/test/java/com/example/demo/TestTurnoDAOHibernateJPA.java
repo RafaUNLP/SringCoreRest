@@ -21,7 +21,7 @@ import com.example.demo.persistencia.clases.entidades.Turno;
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles("test")  // Activa el perfil 'test' para las pruebas
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestTurnoDAOHibernateJPA {
 
@@ -31,7 +31,6 @@ public class TestTurnoDAOHibernateJPA {
 
     @BeforeEach
     public void setUp() {
-        // Crear y persistir turnos de ejemplo solo si no existen
         if (turnoDao.findAllOrderedByInitialHour().isEmpty()) {
             Turno turno1 = new Turno("Mañana", LocalTime.of(8, 0), LocalTime.of(12, 0));
             Turno turno2 = new Turno("Tarde", LocalTime.of(13, 0), LocalTime.of(17, 0));

@@ -34,7 +34,7 @@ public class TestSugerenciaDAOHibernateJPA {
 
     @BeforeEach
     public void setUp() {
-        // Crear y persistir sugerencias de ejemplo solo si no existen
+        //crear y persistir sugerencias de ejemplo solo si no existen
         usuario = usuarioDAO.findAll().getFirst();
         if (sugerenciaDAO.findByDate(LocalDate.of(2024, 10, 23)).isEmpty()) {
             Sugerencia sugerencia1 = new Sugerencia("Texto de ejemplo 1", LocalDate.of(2024, 10, 23),CategoriaSugerencia.Alimentos,usuario);
@@ -67,7 +67,7 @@ public class TestSugerenciaDAOHibernateJPA {
         List<Sugerencia> sugerencias = sugerenciaDAO.findAllOrderedByDateAsc();
         assertNotNull(sugerencias);
         assertEquals(3, sugerencias.size());
-        assertEquals("Texto de ejemplo 2", sugerencias.get(0).getTexto()); // Debe estar en orden ascendente
+        assertEquals("Texto de ejemplo 2", sugerencias.get(0).getTexto());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TestSugerenciaDAOHibernateJPA {
         List<Sugerencia> sugerencias = sugerenciaDAO.findAllOrderedByDateDesc();
         assertNotNull(sugerencias);
         assertEquals(3, sugerencias.size());
-        assertEquals("Texto de ejemplo 1", sugerencias.get(0).getTexto()); // Debe estar en orden descendente
+        assertEquals("Texto de ejemplo 1", sugerencias.get(0).getTexto());
     }
 
     @Test

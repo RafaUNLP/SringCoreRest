@@ -18,7 +18,6 @@ public class MenuDAOHibernateJPA extends GenericDAOHibernateJPA<Menu> implements
 
     @Override
     public List<Menu> findVegetarians() {
-        // Crear la consulta para obtener menús vegetarianos
         TypedQuery<Menu> query = this.em.createQuery("FROM MenuVegetariano", this.entityClass);
         return query.getResultList();
     }

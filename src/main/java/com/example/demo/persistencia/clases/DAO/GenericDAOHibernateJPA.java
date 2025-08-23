@@ -36,7 +36,6 @@ public class GenericDAOHibernateJPA<T> implements GenericDAO<T> {
     @Override
     public boolean exist(long id) {
         try {
-            // Consulta optimizada con "SELECT 1", que es más eficiente
             Integer count = em.createQuery("SELECT 1 FROM " + entityClass.getName() + " e WHERE e.id = :id", Integer.class)
                            .setParameter("id", id)
                            .getSingleResult();
