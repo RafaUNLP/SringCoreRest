@@ -94,21 +94,25 @@ public class DiaController {
             if (anterior == null)
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             
-            dia.setId(id);
+            //setear en null desvincula al día del menú sin perder el hisotrial de menúes
+            if(dia.getMenuEstandar() == null) {
+            	anterior.setMenuEstandar(null);
+            }
+            else { 
+            	if(!anterior.getMenuEstandar().equals(dia.getMenuEstandar()))
+            		anterior.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
+            }
             
-        ///Le saco el seteo del anterior para poder hacer un put de null a la hora de eliminar un menu de un dia en particular
-            if(dia.getMenuEstandar() == null)
-            	dia.setMenuEstandar(null);
-            else 
-            	dia.setMenuEstandar((MenuEstandar)menuDAO.persist(dia.getMenuEstandar()));
+            if(dia.getMenuVegetariano() == null) {
+            	anterior.setMenuVegetariano(null);
+            }
+            else {
+            	if(!anterior.getMenuVegetariano().equals(dia.getMenuVegetariano()))
+            		anterior.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));
+            }
             
-            if(dia.getMenuVegetariano() == null)
-            	dia.setMenuVegetariano(null);
-            else 
-            	dia.setMenuVegetariano((MenuVegetariano)menuDAO.persist(dia.getMenuVegetariano()));             
-            
-            Dia actualizado = diaDAO.update(dia);
-            return new ResponseEntity<>(actualizado, HttpStatus.OK);
+            anterior = diaDAO.update(anterior);
+            return new ResponseEntity<>(anterior, HttpStatus.OK);
         } catch (PersistenceException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

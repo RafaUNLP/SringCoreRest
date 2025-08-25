@@ -65,7 +65,7 @@ public class PersistenceConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins("*");
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.addAllowedHeader("*");        // Permite cualquier encabezado
         config.setAllowCredentials(true);    // Permite el envío de cookies si es necesario

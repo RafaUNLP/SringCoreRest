@@ -70,6 +70,23 @@ SET DATA TYPE text;
 	}
 
 	public abstract boolean esVegetariano();
+
+	public boolean equals(Menu otro) {
+		if(otro == null)
+			return false;
+		
+		if(otro.getId() != null)
+			return this.getId().equals(otro.getId());
+		
+		return 	otro.getNombre().equals(this.getNombre()) &&
+				otro.getEntrada().equals(this.getEntrada()) &&
+				otro.getPlatoPrincipal().equals(this.getPlatoPrincipal()) &&
+				otro.getBebida().equals(this.getBebida()) &&
+				otro.getPostre().equals(this.getPostre()) &&
+				otro.getPrecio() == this.getPrecio() &&
+				(otro.esVegetariano() == this.esVegetariano()) &&
+				otro.getImagen().equals(this.getImagen());
+	}
 	
 	public double getPrecio() {
 		return precio;
